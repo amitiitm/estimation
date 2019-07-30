@@ -22,4 +22,13 @@ Rails.application.routes.draw do
   end
 
   resources :dashboards
+  resources :clients do
+    collection do
+      get 'register'
+      post 'register'
+      get 'login'
+      post 'login'
+      post 'generate_otp'
+    end
+  end
 end

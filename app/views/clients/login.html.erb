@@ -1,0 +1,69 @@
+<div class="loginColumns animated fadeInDown" style="padding-top:8%;">
+  <%= render :partial => 'shared/notification' %>
+  <div class="row">
+    <%= render :partial => 'shared/login_left_panel' %>
+
+    <div class="col-md-6">
+      <div class="ibox-content">
+        <div><h3><%= APP_CONFIG[:product_name] %> Client Login</h3> </div>
+        <div class="hr-line-dashed"></div>
+          <%= form_tag login_clients_path do %>
+            <div class="form-group">
+              <input type="email" class="form-control" placeholder="Email" required="true" name="email" id="email">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" placeholder="Enter Previous OTP or generate new." name="password" required="true">
+            </div>
+
+            <button type="submit" class="btn btn-success block full-width m-b">
+              Login
+            </button>
+
+            <button type="text" class="btn btn-primary block full-width m-b" id="generate_otp_btn">
+              GENERATE OTP
+            </button>
+
+            <p class="text-danger text-center" style="display: none;" id="otp_message">
+              <small>OTP sent successfully to your email</small>
+            </p>
+
+            <p class="text-muted text-center">
+              <small>Do not have an account?</small>
+            </p>
+            <a class="btn btn-sm btn-white btn-block" href="<%= register_clients_path %>">Client SignUp Here</a>
+            <p class="text-muted text-center"></p>
+
+          <% end %>
+      </div>
+    </div>
+  </div>
+  <hr />
+</div>
+
+<script type="text/javascript">
+  $("#generate_otp_btn").click(function(e){
+    e.preventDefault();
+    var email = $('#email').val();
+    if(email.length > 8){
+      $.ajax({
+         type: "POST",// GET in place of POST
+         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+         contentType: "application/json; charset=utf-8",
+         url: "<%= generate_otp_clients_path %>",
+         data : JSON.stringify({email:email}),
+         dataType: "json",
+         success: function (result) {
+            $('#otp_message').show();
+            $('#generate_otp_btn').hide();
+            window.alert("OTP sent successfully to your email!!");
+         },
+         error: function (){
+            window.alert("something wrong!");
+         }
+      });
+    } else {
+      alert('Please enter email.')
+    }
+
+  });
+</script>
