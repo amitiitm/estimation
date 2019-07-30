@@ -47,10 +47,12 @@ gem 'mysql2', '~> 0.3.18'
 gem 'rubocop'
 gem 'rubocop-rails'
 gem 'faker'
-
+gem 'delayed_job'
+gem 'delayed_job_active_record'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'dotenv-rails'
 end
 
 group :development do

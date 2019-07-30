@@ -1,0 +1,17 @@
+development:
+  :product_name: "UI Garage Estimation App"
+  :contact_email: "support@uigarage.com"
+  :title: "UI Garage Project Bid Estimation Tool"
+
+test:
+  :product_name: "UI Garage Estimation App"
+  :contact_email: "support@uigarage.com"
+  :title: "UI Garage Project Bid Estimation Tool"
+staging:
+  :product_name: "UI Garage Estimation App"
+  :contact_email: "support@uigarage.com"
+  :title: "UI Garage Project Bid Estimation Tool"
+production:
+  :product_name: "UI Garage Estimation App"
+  :contact_email: "support@uigarage.com"
+  :title: "UI Garage Project Bid Estimation Tool"
