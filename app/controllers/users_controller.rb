@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 	before_action :authenticate_user
-	before_action :authenticate_role, except: [:profile, :update, :update_password, :change_password]
+	before_action :authenticate_admin_role, except: [:profile, :update, :update_password, :change_password]
 
 	def index
     @users = User.paginate(page: params[:page], per_page: PAGINATION_COUNT).order("full_name")
@@ -74,11 +74,5 @@ class UsersController < ApplicationController
 
   def user_update_params
     params.require(:user).permit(:full_name, :age, :sex, :email, :mobile)
-  end
-
-  def authenticate_role
-  	unless is_admin?
-  		redirect_to dashboards_path
-  	end
   end
 end

@@ -22,6 +22,9 @@ Rails.application.routes.draw do
   end
 
   resources :dashboards
+  resources :templates
+  resources :categories
+  resources :sub_categories
   resources :clients do
     collection do
       get 'register'

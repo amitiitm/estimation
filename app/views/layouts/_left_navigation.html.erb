@@ -35,7 +35,13 @@
             <% if is_admin? %>
                 <li class="<%= is_active_controller('users') %>">
                     <%= link_to users_path do %>
-                        <i class="fa fa-user"></i> <span class="nav-label">Users</span> 
+                        <i class="fa fa-user"></i> <span class="nav-label">User Management</span> 
+                    <% end %>
+                </li>
+
+                <li class="<%= is_active_controller('templates') %>">
+                    <%= link_to templates_path do %>
+                        <i class="fa fa-file"></i> <span class="nav-label">Templates</span> 
                     <% end %>
                 </li>
             <% end %>

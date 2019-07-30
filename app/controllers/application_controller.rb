@@ -8,6 +8,12 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+  def authenticate_admin_role
+    unless is_admin?
+      redirect_to dashboards_path
+    end
+  end
+
   def init_session(obj)
     session[:id] = obj.id
     session[:user_id] = obj.id
