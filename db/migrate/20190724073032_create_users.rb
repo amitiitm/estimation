@@ -11,7 +11,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string :created_by
       t.string :updated_by
       t.text :skills
-      t.boolean :status, default: false
+      t.boolean :status, default: true
       t.timestamps null: false
     end
   end

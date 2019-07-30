@@ -1,6 +1,6 @@
 class LoginController < ApplicationController
   before_action :authenticate_user, only: [:update]
-  layout "empty", only: [:index, :new, :sign_out]
+  layout "empty", only: [:index, :new, :sign_out, :forgot_password]
 
   def index
 
@@ -42,23 +42,20 @@ class LoginController < ApplicationController
     redirect_to root_url
   end
 
-  def update
-    first_name = params[:user][:first_name]
-    mobile = params[:user][:mobile]
-    password = params[:user][:password]
-    mailchimp_api_key = params[:user][:mailchimp_api_key]
-    mailchimp_list_id = params[:user][:mailchimp_list_id]
-    if first_name.present? && mobile.present? && password.present?
-      name = first_name.split(' ')
-      first_name = name[0]
-      last_name = name[1..4].join(' ')
-      encrypted_pwd = User.encrypt(password)
-      current_user.update_attributes(first_name: first_name, last_name: last_name, mobile: mobile, password: encrypted_pwd, mailchimp_api_key: mailchimp_api_key, mailchimp_list_id: mailchimp_list_id)
-      flash[:notice] = 'User details have been updated successfully.'
-    else
-      flash[:warning] = 'Insufficient parameters'
+  def forgot_password
+    if request.method.eql? 'POST'
+      email = params[:email]
+      user = User.where(email: email).first
+      if user.present?
+        new_password = User.generate_random_password
+        user.update_attributes(password: User.encrypt(new_password))
+        UserNotifierMailer.forgot_password(user, new_password).deliver_later
+        flash[:notice] = 'Your password is successfully reset, Please check your registered Email'
+      else
+        flash[:warning] = 'Email is not registered with us'
+      end
+      redirect_to forgot_password_login_index_path
     end
-    render 'edit'
   end
 
   private

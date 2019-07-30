@@ -9,7 +9,12 @@
                         <span class="text-muted text-xs block"><%= session[:role] %> <b class="caret"></b></span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a class="dropdown-item" href="<%= url_for :controller => 'users', :action => 'profile' %>">Profile</a></li>
+                        <li>
+                            <a class="dropdown-item" href="<%= url_for :controller => 'users', :action => 'profile' %>">Profile</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="<%= url_for :controller => 'users', :action => 'update_password' %>">Change Password</a>
+                        </li>
                         <li class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="<%= url_for :controller => 'login', :action => 'sign_out' %>">Logout</a></li>
                     </ul>
@@ -25,7 +30,13 @@
                 <% end %>
             </li>
 
-            
+            <% if is_admin? %>
+                <li class="<%= is_active_controller('users') %>">
+                    <%= link_to users_path do %>
+                        <i class="fa fa-user"></i> <span class="nav-label">Users</span> 
+                    <% end %>
+                </li>
+            <% end %>
         </ul>
 
     </div>

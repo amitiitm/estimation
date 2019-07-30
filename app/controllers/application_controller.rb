@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :exception
-  helper_method :current_user
-	 
+  helper_method :current_user, :is_admin?, :is_sme?, :is_client?
+
 	def authenticate_user
 		unless session[:id].present?
 			redirect_to login_index_path
@@ -18,5 +18,17 @@ class ApplicationController < ActionController::Base
 
   def current_user
     session[:id].present? ?  User.find(session[:id]) : []
+  end
+
+  def is_admin?
+    session[:id].present? && session[:role].eql?(ADMIN)
+  end
+
+  def is_sme?
+    session[:id].present? && session[:role].eql?(SME)
+  end
+
+  def is_client?
+    session[:id].present? && session[:role].eql?(CLIENT)
   end
 end

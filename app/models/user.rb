@@ -4,9 +4,10 @@ class User < ApplicationRecord
   validates :password, :presence => true
   validates :password, :confirmation => true, :presence => true, :on => :create
 
-  ROLES = {'Admin' => 10, 'SME' => 20, 'Client' => 30}
+  ROLES = {ADMIN => 10, SME => 20, CLIENT => 30}
 
   before_create :encrypt_password
+	scope :active, -> { where(status: true) }
 
   def self.authenticate(username, password)
     password = User::encrypt(password)
@@ -16,14 +17,21 @@ class User < ApplicationRecord
   def self.create_user(params)
     user = self.new(:email => params[:email], :mobile => params[:mobile])
     user.full_name = params[:full_name]
-    user.password = params[:password]
+    password = generate_random_password
+    user.password = password
     user.role_id = params[:role_id]
-    user
+    return user, password
   end
 
   def self.encrypt(password)
     Digest::SHA1.hexdigest("#{password}")
   end
+
+	def self.generate_random_password
+		'%08d' % rand(10 ** 8)
+    # ('0'..'z').to_a.shuffle.first(8).join
+  end
+
   protected
   def encrypt_password
     self.password = User.encrypt(self.password)
