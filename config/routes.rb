@@ -25,6 +25,14 @@ Rails.application.routes.draw do
   resources :templates
   resources :categories
   resources :sub_categories
+  resources :estimations do
+    collection do
+      get 'estimation_details'
+      get 'functional_scope'
+      post 'functional_scope'
+    end
+  end
+
   resources :clients do
     collection do
       get 'register'

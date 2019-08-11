@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_30_173506) do
+ActiveRecord::Schema.define(version: 2019_08_11_182121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,36 @@ ActiveRecord::Schema.define(version: 2019_07_30_173506) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "estimations", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "name"
+    t.boolean "status", default: true
+    t.string "owner_email"
+    t.string "notification_emails"
+    t.string "followup_emails"
+    t.boolean "notification_flag"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "client_id"
+    t.integer "created_by"
+    t.text "template_ids", default: [], array: true
+  end
+
+  create_table "functional_scopes", force: :cascade do |t|
+    t.integer "estimation_id"
+    t.integer "usecase_low_count"
+    t.integer "usecase_medium_count"
+    t.integer "usecase_high_count"
+    t.integer "ui_low_count"
+    t.integer "ui_medium_count"
+    t.integer "ui_high_count"
+    t.integer "service_low_count"
+    t.integer "service_medium_count"
+    t.integer "service_high_count"
   end
 
   create_table "sub_categories", force: :cascade do |t|

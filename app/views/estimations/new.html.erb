@@ -1,0 +1,109 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Create New Estimation</h2>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<%= render :partial => "shared/notification"%>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="tabs-container">
+        <div class="ibox-title">
+          <h5>Add Estimation Details</h5>
+        </div>
+
+        <div class="tab-content">
+          <div id="tab-1" class="tab-pane active">
+            <div class="panel-body">
+              <%= form_for @estimation,:html => {:id => 'submit_estimation'} do |f| %>
+                  <fieldset class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-12 control-label">Name:</label>
+                      <div class="col-sm-12">
+                        <%= f.text_field :name,:class =>  "form-control",:placeholder => 'Please Enter Name', required: true %>
+                      </div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-12 control-label">Template:</label>
+                      <div class="col-sm-12">
+                        <%= f.select :template_ids, options_for_select(get_templates, :selected => @estimation.template_ids),{:prompt => '-Select Templates-'},{:class => 'form-control chosen-select',:multiple => true} %>
+                      </div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-12 control-label">Start Date:</label>
+                      <div class="input-group date col-sm-3">
+                          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                          <%= f.text_field :start_date, :class => 'form-control', value: Date.today + 1.day %>
+                      </div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-12 control-label">End Date:</label>
+                      <div class="input-group date col-sm-3">
+                          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                          <%= f.text_field :end_date, :class => 'form-control', value: Date.today + 4.day %>
+                      </div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-12 control-label">SME:</label>
+                      <div class="col-sm-12">
+                        <%= f.select :user_id, options_for_select(get_smes, :selected => @estimation.user_id),{:prompt => '-Select SME-'},{:class => 'form-control'} %>
+                      </div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-12 control-label">Client:</label>
+                      <div class="col-sm-12">
+                        <%= f.select :client_id, options_for_select(get_clients, :selected => @estimation.client_id),{:prompt => '-Select Client-'},{:class => 'form-control'} %>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group"><label class="col-sm-12 control-label">Owner Email:</label>
+                      <div class="col-sm-12">
+                        <%= f.text_field :owner_email,:class =>  "form-control",:placeholder => 'Please Enter only one Owner Email' %>
+                      </div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-12 control-label">Notification Emails:</label>
+                      <div class="col-sm-12">
+                        <%= f.text_field :notification_emails,:class =>  "form-control",:placeholder => 'Please Enter comma separated Notification Emails' %>
+                      </div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-12 control-label">Followup Email:</label>
+                      <div class="col-sm-12">
+                        <%= f.text_field :followup_emails,:class =>  "form-control",:placeholder => 'Please Enter comma separated Followup Emails' %>
+                      </div>
+                    </div>
+
+                    
+                    <%= f.hidden_field :created_by,:class => 'form-control', :value => session[:user_id] %>
+
+
+                    <div class="form-group"><label class="col-sm-12 control-label"></label>
+                      <button class="btn btn-primary " type="button" id="submit_button"><i class="fa fa-check"></i>&nbsp;Submit</button>
+                      <button class="btn btn-white" type="button" id="cancel_button">Cancel</button>
+                    </div>
+                  </fieldset>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+    $( document ).ready(function() {
+        $("#submit_button").click(function(){
+            $('#submit_estimation').submit()
+        });
+        $("#cancel_button").click(function(){
+            location.href ="<%= estimations_path %>"
+        });
+    });
+</script>

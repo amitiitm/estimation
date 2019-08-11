@@ -1,0 +1,84 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Estimations</h2>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox">
+      	<div class="ibox-title">
+           <h5>Estimations List</h5>
+            <div class="ibox-tools">
+               <%= link_to 'Create New Estimation', new_estimation_path, :class => "btn btn-w-m btn-primary", :title => "Create New Estimation"%>
+            </div>
+        </div>
+        <div class="ibox-content">
+		      <%= render :partial => "shared/notification"%>
+          <% if @estimations.present? %>
+              <%= will_paginate @estimations , renderer: BootstrapPagination::Rails %>
+              <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                <thead>
+                <tr>
+                  <th>Template</th>
+                  <th>SME</th>
+                  <th>Client</th>
+                  <th>Name</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Owner Email</th>
+                  <th>Created At</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @estimations.each do |estimation| %>
+                    <tr>
+                      <td>
+                        <% Estimation.templates(estimation.template_ids).each do |template| %>
+                          <%= link_to template.name, "#{estimation_details_estimations_path}?tid=#{template.id}&eid=#{estimation.id}",  :method => 'get', :class => 'btn btn-success btn-sm'%><br/><br/>
+                        <% end %>
+                      </td>
+                       <td>
+                        <%= estimation.user.full_name %>
+                      </td>
+                      
+                      <td>
+                        <%= estimation.client.full_name %>
+                      </td>
+                      <td>
+                        <%= estimation.name %>
+                      </td>
+                      <td>
+                        <%= estimation.start_date %>
+                      </td>
+                      <td>
+                        <%= estimation.end_date %>
+                      </td>
+                      <td>
+                        <%= estimation.owner_email %>
+                      </td>
+  
+                      <td>
+                        <%= estimation.created_at.strftime('%d %B, %Y') %>
+                      </td>
+
+                      <td class="project-actions" style="text-align: center;">
+                        <%= link_to '<i class="fa fa-step-forward"></i> Functional Scope'.html_safe,"#{functional_scope_estimations_url}?functional_scope[estimation_id]=#{estimation.id}", :class => 'btn btn-white btn-sm'%>
+                      </td>
+                    </tr>
+                <% end %>
+                </tbody>
+              </table>
+          <% else %>
+              <div class="alert alert-danger" style="text-align: center;"> No Estimations Added Yet</div>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+

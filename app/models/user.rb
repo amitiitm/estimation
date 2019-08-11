@@ -4,10 +4,14 @@ class User < ApplicationRecord
   validates :password, :presence => true
   validates :password, :confirmation => true, :presence => true, :on => :create
 
-  ROLES = {ADMIN => 10, SME => 20, CLIENT => 30}
+  has_many :estimations
+
+  ROLES = {ADMIN => 10, SME => 20}
 
   before_create :encrypt_password
 	scope :active, -> { where(status: true) }
+  scope :admins, -> { where(role_id: ROLES[ADMIN]) }
+  scope :smes, -> { where(role_id: ROLES[SME]) }
 
   def self.authenticate(username, password)
     password = User::encrypt(password)

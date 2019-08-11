@@ -1,8 +1,11 @@
 class ClientsController < ApplicationController
 	layout "empty", only: [:register, :login]
+	before_action :authenticate_user, only: [:index]
+	before_action :authenticate_admin_role, only: [:index]
 
 	def index
-	end
+    @clients = Client.paginate(page: params[:page], per_page: PAGINATION_COUNT).order("full_name")
+  end
 
 	def register
 		if request.method.eql? 'POST'

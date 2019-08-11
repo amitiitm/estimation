@@ -21,4 +21,5 @@
 //= require slimscroll/jquery.slimscroll.min.js
 //= require metisMenu/jquery.metisMenu.js
 //= require inspinia.js
-
+//= require datepicker.js
+//= require chosen/chosen.jquery.js

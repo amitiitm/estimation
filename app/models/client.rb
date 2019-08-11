@@ -1,6 +1,9 @@
 class Client < ApplicationRecord
 	validates :email, :uniqueness => true
   validates :email, :presence => true
+
+  has_many :estimations
+
   scope :active, -> { where(status: true) }
 
   def self.authenticate(username, password)

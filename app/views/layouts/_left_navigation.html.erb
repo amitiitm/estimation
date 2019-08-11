@@ -44,7 +44,20 @@
                         <i class="fa fa-file"></i> <span class="nav-label">Templates</span> 
                     <% end %>
                 </li>
+
+                <li class="<%= is_active_controller('clients') %>">
+                    <%= link_to clients_path do %>
+                        <i class="fa fa-users"></i> <span class="nav-label">Clients</span> 
+                    <% end %>
+                </li>
             <% end %>
+
+            <li class="<%= is_active_controller('estimations') %>">
+                <%= link_to estimations_path do %>
+                    <i class="fa fa-calculator"></i> <span class="nav-label">Estimations</span> 
+                <% end %>
+            </li>
+
         </ul>
 
     </div>

@@ -1,0 +1,72 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Clients</h2>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox">
+      	<div class="ibox-title">
+           <h5>Clients List</h5>
+            <div class="ibox-tools">
+               <%#= link_to 'Create New Client', new_client_path, :class => "btn btn-w-m btn-primary", :title => "Add New User"%>
+            </div>
+        </div>
+        <div class="ibox-content">
+		      <%= render :partial => "shared/notification"%>
+          <% if @clients.present? %>
+              <%= will_paginate @clients , renderer: BootstrapPagination::Rails %>
+              <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                <thead>
+                <tr>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>Department</th>
+                  <th>Created At</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @clients.each do |client| %>
+                    <tr>
+                      <td>
+                        <%= client.full_name %>
+                      </td>
+                      
+                      <td>
+                        <%= client.email %>
+                      </td>
+
+                      <td>
+                        <%= client.mobile %>
+                      </td>
+
+                      <td>
+                        <%= client.department %>
+                      </td>
+
+                      <td>
+                        <%= client.created_at.strftime('%d %B, %Y') %>
+                      </td>
+
+                      <td class="project-actions" style="text-align: center;">
+                        
+                      </td>
+                    </tr>
+                <% end %>
+                </tbody>
+              </table>
+          <% else %>
+              <div class="alert alert-danger" style="text-align: center;"> No Clients Added Yet</div>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
