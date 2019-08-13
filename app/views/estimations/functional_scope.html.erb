@@ -22,7 +22,7 @@
               <%= form_tag :controller => 'estimations', :action => 'functional_scope', :id => 'functional_scope',:method => 'POST' do %>
                   <fieldset class="form-horizontal">
 
-                    <div class="form-group row"><label class="col-sm-12 control-label">Usecases:</label>
+                    <div class="form-group row"><label class="col-sm-12 control-label">Usecases Count Low / Medium / High</label>
                       <div class="col-sm-4">
                         <%= number_field_tag 'functional_scope[usecase_low_count]', @functional_scope.usecase_low_count, :class =>  "form-control",:placeholder => 'Usecase Low Count', required: true %>
                       </div>
@@ -34,7 +34,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group row"><label class="col-sm-12 control-label">UI Pages Count:</label>
+                    <div class="form-group row"><label class="col-sm-12 control-label">UI Pages Count Low / Medium / High</label>
                       <div class="col-sm-4">
                         <%= number_field_tag 'functional_scope[ui_low_count]', @functional_scope.ui_low_count, :class =>  "form-control",:placeholder => 'UI Low Count', required: true %>
                       </div>
@@ -46,7 +46,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group row"><label class="col-sm-12 control-label">Services Count:</label>
+                    <div class="form-group row"><label class="col-sm-12 control-label">Services Count Low / Medium / High</label>
                       <div class="col-sm-4">
                         <%= number_field_tag 'functional_scope[service_low_count]', @functional_scope.service_low_count, :class =>  "form-control",:placeholder => 'Service Low Count', required: true %>
                       </div>

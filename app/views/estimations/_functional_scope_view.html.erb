@@ -1,0 +1,65 @@
+<% functional_scope = @estimation.functional_scope %>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>UseCases low/medium/high</h5>
+            </div>
+            <div class="ibox-content">
+                
+                <div class="row">
+                    <div class="col-lg-4">
+                        <%= text_field_tag '', functional_scope.usecase_low_count, :class =>  "form-control custom-input", readonly: true %>
+                    </div>
+                    <div class="col-lg-4">
+                        <%= text_field_tag '', functional_scope.usecase_medium_count, :class =>  "form-control custom-input", readonly: true %>
+                    </div>
+                    <div class="col-lg-4">
+                        <%= text_field_tag '', functional_scope.usecase_high_count, :class =>  "form-control custom-input", readonly: true %>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>UI Pages low/medium/high</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <%= text_field_tag '', functional_scope.ui_low_count, :class =>  "form-control custom-input", readonly: true %>
+                    </div>
+                    <div class="col-lg-4">
+                        <%= text_field_tag '', functional_scope.ui_medium_count, :class =>  "form-control custom-input", readonly: true %>
+                    </div>
+                    <div class="col-lg-4">
+                        <%= text_field_tag '', functional_scope.ui_high_count, :class =>  "form-control custom-input", readonly: true %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Services low/medium/high</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <%= text_field_tag '', functional_scope.service_low_count, :class =>  "form-control custom-input", readonly: true %>
+                    </div>
+                    <div class="col-lg-4">
+                        <%= text_field_tag '', functional_scope.service_medium_count, :class =>  "form-control custom-input", readonly: true %>
+                    </div>
+                    <div class="col-lg-4">
+                        <%= text_field_tag '', functional_scope.service_high_count, :class =>  "form-control custom-input", readonly: true %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

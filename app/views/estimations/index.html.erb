@@ -26,17 +26,17 @@
                   <th>Name</th>
                   <th>Start Date</th>
                   <th>End Date</th>
-                  <th>Owner Email</th>
                   <th>Created At</th>
                   <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <% @estimations.each do |estimation| %>
+                  <% templates = Estimation.templates(estimation.template_ids) %>
                     <tr>
                       <td>
-                        <% Estimation.templates(estimation.template_ids).each do |template| %>
-                          <%= link_to template.name, "#{estimation_details_estimations_path}?tid=#{template.id}&eid=#{estimation.id}",  :method => 'get', :class => 'btn btn-success btn-sm'%><br/><br/>
+                        <% templates.each do |template| %>
+                          <%= link_to template.name, "#{categories_path}?id=#{template.id}" %><br/>
                         <% end %>
                       </td>
                        <td>
@@ -55,16 +55,30 @@
                       <td>
                         <%= estimation.end_date %>
                       </td>
-                      <td>
-                        <%= estimation.owner_email %>
-                      </td>
   
                       <td>
-                        <%= estimation.created_at.strftime('%d %B, %Y') %>
+                        <%= estimation.created_at.strftime('%d %b, %y') %>
                       </td>
 
                       <td class="project-actions" style="text-align: center;">
-                        <%= link_to '<i class="fa fa-step-forward"></i> Functional Scope'.html_safe,"#{functional_scope_estimations_url}?functional_scope[estimation_id]=#{estimation.id}", :class => 'btn btn-white btn-sm'%>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user" x-placement="bottom-start" style="position: absolute; top: 18px; left: 26px; will-change: top, left;">
+                            <li>
+                              <%= link_to 'Define UseCases',"#{usecase_estimations_url}?usecase[estimation_id]=#{estimation.id}", :class => 'dropdown-item'%>
+                            </li>
+                            <li>
+                              <%= link_to 'Functional Scope',"#{functional_scope_estimations_url}?functional_scope[estimation_id]=#{estimation.id}", :class => 'dropdown-item'%>
+                            </li>
+                            <% if estimation.functional_scope.present? %>
+                              <% templates.each do |template| %>
+                                <li>
+                                  <%= link_to template.name, "#{estimation_details_estimations_path}?tid=#{template.id}&eid=#{estimation.id}",  :method => 'get', :class => 'dropdown-item' %>
+                                </li>
+                              <% end %>
+                            <% end %>
+                        </ul>
                       </td>
                     </tr>
                 <% end %>

@@ -30,6 +30,8 @@ Rails.application.routes.draw do
       get 'estimation_details'
       get 'functional_scope'
       post 'functional_scope'
+      get 'usecase'
+      post 'usecase'
     end
   end
 
