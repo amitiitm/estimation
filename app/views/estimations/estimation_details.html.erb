@@ -9,10 +9,11 @@
 </div>
 
 <%= render 'functional_scope_view' %>
-
+<% create_button = false %>
 <% @template.categories.each do |category| %>
     <% sub_categories = category.sub_categories %>
     <% if sub_categories.present? %>
+        <% create_button = true %>
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
@@ -62,6 +63,7 @@
         </div>
     <% end %>
 <% end %>
-
-<a class="btn btn-primary btn-block" href="<%= login_clients_path %>">Create Estimation</a>
+<% if create_button %>
+  <a class="btn btn-primary btn-block" href="<%= login_clients_path %>">Create Estimation</a>
+<% end %>
 <p class="text-muted text-center" style="margin-bottom: 60px;"></p>
