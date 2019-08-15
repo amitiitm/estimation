@@ -24,6 +24,6 @@ class SubCategoriesController < ApplicationController
 
 	private
 	def category_params
-		params.require(:sub_category).permit(:name, :description, :category_id, :hours)
+		params.require(:sub_category).permit(:name, :description, :category_id, :hours, :offer, :class_name)
 	end
 end

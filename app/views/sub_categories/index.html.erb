@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
-    <h2>Sub Categories</h2>
+    <h2>Sub Categories for Category : <%= Category.find(@category_id)&.name %></h2>
   </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -20,10 +20,11 @@
               <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
                 <thead>
                 <tr>
-                  <th>Category</th>
-                  <th>Name</th>
-                  <th>Description</th>
+                  <th>Sub Category</th>
+                  <th>Class Name</th>
                   <th>Hours</th>
+                  <th>On Offer</th>
+                  <th>Description</th>
                   <th class="text-center">Actions</th>
                 </tr>
                 </thead>
@@ -31,19 +32,19 @@
                 <% @sub_categories.each do |sub_category| %>
                     <tr>
                       <td>
-                        <%= sub_category.category.name %>
-                      </td>
-
-                       <td>
                         <%= sub_category.name %>
                       </td>
-                      
                       <td>
-                        <%= sub_category.description %>
+                        <%= SubCategory::CLASS_NAMES.key(sub_category.class_name) %>
                       </td>
-
                       <td>
                         <%= sub_category.hours %>
+                      </td>
+                      <td>
+                        <%= SubCategory::OFFER.key(sub_category.offer) %>
+                      </td>
+                      <td>
+                        <%= sub_category.description %>
                       </td>
                       
                       <td class="project-actions" style="text-align: center;">

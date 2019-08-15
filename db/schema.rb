@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_15_123148) do
+ActiveRecord::Schema.define(version: 2019_08_15_171100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_123148) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "offer"
   end
 
   create_table "templates", force: :cascade do |t|
@@ -102,7 +103,6 @@ ActiveRecord::Schema.define(version: 2019_08_15_123148) do
   create_table "usecases", force: :cascade do |t|
     t.integer "estimation_id"
     t.string "name"
-    t.string "complexity"
     t.integer "ui_low_count"
     t.integer "ui_medium_count"
     t.integer "ui_high_count"
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_123148) do
     t.integer "service_high_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "complexity"
   end
 
   create_table "users", force: :cascade do |t|

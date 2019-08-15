@@ -6,7 +6,8 @@ class User < ApplicationRecord
 
   has_many :estimations
 
-  ROLES = {ADMIN => 10, SME => 20}
+  ROLES = {ADMIN => 10, SME => 20, CLIENT => 30}
+  ADMIN_ROLES = {ADMIN => 10, SME => 20}
 
   before_create :encrypt_password
 	scope :active, -> { where(status: true) }

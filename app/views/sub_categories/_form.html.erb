@@ -19,9 +19,21 @@
                       <%= f.hidden_field :category_id, value: @category_id %>
                     </div>
 
-                      <div class="col-sm-12">
+                    <div class="row" >
+                      <div class="col-sm-4">
                         <%= f.number_field :hours,:class =>  "form-control",:placeholder => 'Please Enter Hours', required: true %>
                       </div>
+
+                      <div class="col-sm-4">
+                        <%= f.select :offer, options_for_select(SubCategory::OFFER, :selected => @sub_category.offer),{:prompt => '-UI Garage Offer-'},{:class => 'form-control'} %>
+                      </div> 
+
+                      <div class="col-sm-4">
+                        <%= f.select :class_name, options_for_select(SubCategory::CLASS_NAMES, :selected => @sub_category.class_name),{:prompt => '-Select Class Name for Calculation-'},{:class => 'form-control'} %>
+                      </div> 
+                    </div>
+
+
 
                     <div class="form-group"><label class="col-sm-12 control-label">Description:</label>
                       <div class="col-sm-12">
@@ -50,7 +62,7 @@
             $('#submit_category').submit()
         });
         $("#cancel_button").click(function(){
-            location.href ="<%= templates_url %>"
+            location.href ="<%= sub_categories_path %>?id=<%= @category_id %>"
         });
     });
 </script>
