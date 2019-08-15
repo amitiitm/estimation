@@ -50,6 +50,23 @@ class EstimationsController < ApplicationController
 		end
 	end
 
+
+	def usecase
+		@estimation = Estimation.find(usecase_params[:estimation_id])
+		if request.method.eql? 'POST'
+			usecase = Usecase.new(usecase_params)   
+	    if usecase.save   
+	      flash[:notice] = 'Usecase added!'   
+	    else   
+	      flash[:warning] = estimation.errors.full_messages
+	    end
+	    redirect_to "#{usecase_estimations_path}?usecase[estimation_id]=#{usecase_params[:estimation_id]}"
+	  else
+			@usecase = Usecase.new
+			@usecases = @estimation.usecases
+		end
+	end
+
 	private
 	def estimation_params
 		params.require(:estimation).permit!
@@ -58,5 +75,9 @@ class EstimationsController < ApplicationController
 
 	def functional_scope_params
 		params.require(:functional_scope).permit!
+	end
+
+	def usecase_params
+		params.require(:usecase).permit!
 	end
 end

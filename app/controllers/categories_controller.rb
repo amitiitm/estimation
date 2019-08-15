@@ -18,7 +18,7 @@ class CategoriesController < ApplicationController
       redirect_to "#{categories_path}?id=#{category.template_id}"   
     else   
       flash[:warning] = category.errors.full_messages
-      render :new   
+      redirect_to "#{categories_path}?id=#{category_params[:template_id]}"
     end 
 	end
 

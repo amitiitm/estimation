@@ -1,0 +1,76 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Usecases</h2>
+  </div>
+</div>
+
+<%= render 'usecase_form' %>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox">
+      	<div class="ibox-title">
+           <h5>Usecases List</h5>
+        </div>
+        <div class="ibox-content">
+		      <%= render :partial => "shared/notification"%>
+          <% if @usecases.present? %>
+              <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Complexity</th>
+                  <th>UI Low Count</th>
+                  <th>Medium</th>
+                  <th>High</th>
+                  <th>Service Low Count</th>
+                  <th>Medium</th>
+                  <th>High</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @usecases.each do |usecase| %>
+                    <tr>
+                      <td>
+                        <%= usecase.name %>
+                      </td>
+                      <td>
+                        <%= Usecase::COMPLEXITY.key(usecase.complexity&.to_i) %>
+                      </td>
+                      <td>
+                        <%= usecase.ui_low_count %>
+                      </td>
+                      <td>
+                        <%= usecase.ui_medium_count %>
+                      </td>
+                      <td>
+                        <%= usecase.ui_high_count %>
+                      </td>
+                      <td>
+                        <%= usecase.service_low_count %>
+                      </td>
+                      <td>
+                        <%= usecase.service_medium_count %>
+                      </td>
+                      <td>
+                        <%= usecase.service_high_count %>
+                      </td>
+                      
+                    </tr>
+                <% end %>
+                </tbody>
+              </table>
+          <% else %>
+              <div class="alert alert-danger" style="text-align: center;"> No Usecases Added Yet</div>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+

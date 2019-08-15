@@ -2,6 +2,7 @@ class Estimation < ApplicationRecord
 	belongs_to :user
 	belongs_to :client
 	has_one :functional_scope
+	has_many :usecases
 
 	before_save :flatten_template_ids
  

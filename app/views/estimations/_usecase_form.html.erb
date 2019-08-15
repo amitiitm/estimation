@@ -1,0 +1,78 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+<%= render :partial => "shared/notification"%>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="tabs-container">
+        <div class="ibox-title">
+          <h5>Create Usecase</h5>
+          <div class="ibox-tools">
+              <a class="collapse-link">
+                  <i class="fa fa-chevron-up"></i>
+              </a>
+          </div>
+        </div>
+        <div class="tab-content">
+          <div id="tab-1" class="tab-pane active">
+            <div class="panel-body">
+              <%= form_tag :controller => 'estimations', :action => 'usecase', :method => 'POST' do %>
+                  <fieldset class="form-horizontal">
+
+                    <div class="form-group row">
+                      <div class="col-sm-10 custom-col">
+                        <%= text_field_tag 'usecase[name]', @usecase.name, :class =>  "form-control",:placeholder => 'Please enter usecase name', required: true %>
+                      </div>
+                      <div class="col-sm-2 custom-col">
+                        <%= select_tag 'usecase[complexity]', options_for_select(Usecase::COMPLEXITY), prompt: "Select Complexity", class: 'form-control' %>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-sm-2 custom-col">
+                        <%= number_field_tag 'usecase[ui_low_count]', @usecase.ui_low_count, :class =>  "form-control custom-input",:placeholder => 'UI Low Count' %>
+                      </div>
+                      <div class="col-sm-2 custom-col">
+                        <%= number_field_tag 'usecase[ui_medium_count]', @usecase.ui_medium_count,:class =>  "form-control custom-input",:placeholder => 'UI Medium Count' %>
+                      </div>
+                      <div class="col-sm-2 custom-col">
+                        <%= number_field_tag 'usecase[ui_high_count]', @usecase.ui_high_count,:class =>  "form-control custom-input",:placeholder => 'UI High Count' %>
+                      </div>
+
+                      <div class="col-sm-2 custom-col">
+                        <%= number_field_tag 'usecase[service_low_count]', @usecase.service_low_count, :class =>  "form-control custom-input",:placeholder => 'Service Low Count' %>
+                      </div>
+                      <div class="col-sm-2 custom-col">
+                        <%= number_field_tag 'usecase[service_medium_count]', @usecase.service_medium_count,:class =>  "form-control custom-input",:placeholder => 'Service Medium Count' %>
+                      </div>
+                      <div class="col-sm-2 custom-col">
+                        <%= number_field_tag 'usecase[service_high_count]', @usecase.service_high_count,:class =>  "form-control custom-input",:placeholder => 'Service High Count' %>
+                      </div>
+                    </div>
+
+
+
+                    
+                    <%= hidden_field_tag 'usecase[estimation_id]', @estimation.id, :class => 'form-control' %>
+
+
+                    <div class="form-group"><label class="col-sm-12 control-label"></label>
+                      <button class="btn btn-primary " type="button" id="submit_button"><i class="fa fa-check"></i>&nbsp;Submit</button>
+                    </div>
+
+                  </fieldset>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  $( document ).ready(function() {
+      $("#submit_button").click(function(){
+          $('form').submit()
+      });
+  });
+</script>
