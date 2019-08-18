@@ -1,6 +1,10 @@
 class EstimationDetail < ApplicationRecord
 	belongs_to :estimation
 
+	def self.estimation_details_by_template(template_id, estimation_id)
+		self.where(template_id: template_id, estimation_id: estimation_id)
+	end
+
 	def self.create_details(params)
 		estimation_details = params['estimation_details']
 		estimation_offers = params['estimation_offers']

@@ -18,7 +18,6 @@ class Estimation < ApplicationRecord
 		Template.where(id: ids)
 	end
 
-
   private
  
   def flatten_template_ids
