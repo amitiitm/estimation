@@ -21,6 +21,7 @@
                 <thead>
                 <tr>
                   <th>Template</th>
+                  <th>Complexity</th>
                   <th>SME</th>
                   <th>Client</th>
                   <th>Name</th>
@@ -39,10 +40,13 @@
                           <%= link_to template.name, "#{categories_path}?id=#{template.id}" %><br/>
                         <% end %>
                       </td>
-                       <td>
+                      <td>
+                        <%= Usecase::COMPLEXITY.key(estimation.complexity&.to_i) %>
+                      </td>
+                      <td>
                         <%= estimation.user.full_name %>
                       </td>
-                      
+                        
                       <td>
                         <%= estimation.client.full_name %>
                       </td>

@@ -10,63 +10,138 @@
 
 <%= render 'functional_scope_view' %>
 <% create_button = false %>
-<% @template.categories.each do |category| %>
-    <% sub_categories = category.sub_categories %>
+<% functional_scope = @estimation.functional_scope %>
+<%= form_tag :controller => 'estimations', :action => 'create_estimation_details', :id => 'estimation_details',:method => 'POST' do %>
+  <% @template.categories.each do |category| %>
+    <% sub_categories = category.sub_categories.active %>
     <% if sub_categories.present? %>
-        <% create_button = true %>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5><%= category.name %></h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <% sub_categories.each do |sub_category| %>
-                        <div class="ibox-content custom-ibox">
-                            <div class="row">
-                                <div class="col-lg-4 custom-col">
-                                    <%= text_field_tag 'estimation_details[sub_category_name]', sub_category.name, :class =>  "form-control custom-input", :placeholder => 'Sub category name' %>
-                                </div>
-                                <div class="col-lg-1 custom-col">
-                                    <input type="text" placeholder="Applicable" class="form-control custom-input">
-                                </div>
-                                <div class="col-lg-1 custom-col">
-                                    <input type="text" placeholder="Enter email" class="form-control custom-input">
-                                </div>
-                                <div class="col-lg-1 custom-col">
-                                    <input type="text" placeholder="Enter email" class="form-control custom-input">
-                                </div>
-                                <div class="col-lg-1 custom-col">
-                                    <input type="text" placeholder="Enter email" class="form-control custom-input">
-                                </div>
-                                <div class="col-lg-1 custom-col">
-                                    <input type="text" placeholder="Enter email" class="form-control custom-input">
-                                </div>
-                                <div class="col-lg-1 custom-col">
-                                    <input type="text" placeholder="Enter email" class="form-control custom-input">
-                                </div>
-                                <div class="col-lg-1 custom-col">
-                                    <input type="text" placeholder="Enter email" class="form-control custom-input">
-                                </div>
-                                <div class="col-lg-1 custom-col">
-                                    <input type="text" placeholder="Enter email" class="form-control custom-input">
-                                </div>
-                            </div>
-                        </div>
-                    <% end %>
+      <% create_button = true %>
+      <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+              <div class="ibox-title">
+                  <h5><%= category.name %></h5>
+                  <div class="ibox-tools">
+                      <a class="collapse-link">
+                          <i class="fa fa-chevron-up"></i>
+                      </a>
+                  </div>
+              </div>
+              <div class="ibox-content custom-ibox">
+                <div class="row">
+                  <div class="col-lg-3">
+                    Development Components
+                  </div>
+                  <div class="col-lg-1">
+                    Applicable(Y/N)
+                  </div>
+                  <div class="col-lg-3">
+                    Per Component (Low / Medium / High)
+                  </div>
+                  <div class="col-lg-3">
+                    # of Component (Low / Medium / High)
+                  </div>
+                  <div class="col-lg-2">
+                    Total Estimated / Overridden
+                  </div>
                 </div>
+              </div>
+
+              
+              <% sub_categories.each do |sub_category| %>
+                <%= hidden_field_tag 'estimation_details[category_id][]', category.id %>
+                <%= hidden_field_tag 'estimation_details[category_name][]', category.name %>
+                <%= hidden_field_tag 'estimation_details[estimation_id][]', @estimation.id %>
+                <%= hidden_field_tag 'estimation_details[template_id][]', @template.id %>
+                <%= hidden_field_tag 'estimation_details[sub_category_id][]', sub_category.id %>
+                <%= hidden_field_tag 'estimation_details[created_by][]', session[:user_id] %>
+
+                <!-- Calculation goes here -->  
+                <%
+                  per_component_low, per_component_medium, per_component_high = 0
+                  component_low_count, component_medium_count, component_high_count = 0
+                  estimated_total, overridden_total = 0
+                  if sub_category.class_name == SubCategory::ONE_TIME_SETUP
+                    if @estimation.complexity == Usecase::COMPLEXITY['Low']
+                      estimated_total = sub_category.low_hours
+                      overridden_total = sub_category.low_hours
+                    elsif @estimation.complexity == Usecase::COMPLEXITY['Medium']
+                      estimated_total = sub_category.medium_hours
+                      overridden_total = sub_category.medium_hours
+                    elsif @estimation.complexity == Usecase::COMPLEXITY['High']
+                      estimated_total = sub_category.hours
+                      overridden_total = sub_category.hours
+                    end
+                  elsif sub_category.class_name == SubCategory::DEPENDS_ON_UI
+                    component_low_count = functional_scope.ui_low_count
+                    component_medium_count = functional_scope.ui_medium_count
+                    component_high_count = functional_scope.ui_high_count
+                    per_component_low = sub_category.low_hours
+                    per_component_medium = sub_category.medium_hours
+                    per_component_high = sub_category.hours
+                    low_total = (component_low_count * per_component_low)
+                    medium_total = (component_medium_count * per_component_medium)
+                    high_total = (component_high_count * per_component_high)
+                    estimated_total = low_total + medium_total + high_total
+                    overridden_total = low_total + medium_total + high_total
+                  end
+
+                %>
+
+
+
+                <div class="ibox-content custom-ibox">
+                  <div class="row">
+                    <div class="col-lg-3 custom-col">
+                      <%= text_field_tag 'estimation_details[sub_category_name][]', sub_category.name, :class =>  "form-control custom-input", :placeholder => 'Sub category name' %>
+                    </div>
+                    <div class="col-lg-1 custom-col">
+                      <%= select_tag 'estimation_details[applicable][]', options_for_select(Estimation::APPLICABLE), prompt: "(Y/N)", class: 'form-control custom-input', style: 'border-color: red;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col">
+                      <%= number_field_tag 'estimation_details[per_component_low][]', per_component_low, :class =>  "form-control custom-input",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col">
+                      <%= number_field_tag 'estimation_details[per_component_medium][]', per_component_medium, :class =>  "form-control custom-input",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col">
+                      <%= number_field_tag 'estimation_details[per_component_high][]', per_component_high, :class =>  "form-control custom-input",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col">
+                      <%= number_field_tag 'estimation_details[component_low_count][]', component_low_count, :class =>  "form-control custom-input",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col">
+                      <%= number_field_tag 'estimation_details[component_medium_count][]', component_medium_count, :class =>  "form-control custom-input",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col">
+                      <%= number_field_tag 'estimation_details[component_high_count][]', component_high_count, :class =>  "form-control custom-input",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col">
+                      <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input", readonly: true, style: 'font-weight: bold;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col">
+                      <%= number_field_tag 'estimation_details[overridden_total][]', overridden_total, :class =>  "form-control custom-input", style: 'font-weight: bold;' %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
             </div>
-        </div>
+          </div>
+      </div>
     <% end %>
+  <% end %>
+
+  <%= render 'offer' %>
 <% end %>
-
-<%= render 'offer' %>
-
 <% if create_button %>
-  <a class="btn btn-primary btn-block" href="<%= login_clients_path %>">Create Estimation</a>
+  <button class="btn btn-primary btn-block" type="button" id="submit_button">Create Estimation</button>
 <% end %>
 <p class="text-muted text-center" style="margin-bottom: 60px;"></p>
+
+<script type="text/javascript">
+    $( document ).ready(function() {
+        $("#submit_button").click(function(){
+          $('form').submit()
+        });
+    });
+</script>

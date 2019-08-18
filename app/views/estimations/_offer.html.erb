@@ -8,7 +8,7 @@
     </div>
     <div class="col-lg-4">
         <div class="ibox "><div class="ibox-title">
-            <%= select_tag 'estimation[offer_flag]', options_for_select(SubCategory::OFFER), prompt: "Add Offer", class: 'form-control' %>
+            <%= select_tag 'estimation_details[offer_flag]', options_for_select(SubCategory::OFFER), prompt: "Add Offer", class: 'form-control', style: 'border-color: red;' %>
         </div></div>
     </div>
 </div>
@@ -28,14 +28,19 @@
                                 </a>
                             </div>
                         </div>
-                        <% sub_categories.each do |sub_category| %>
-                            <div class="ibox-content">
+                            <% sub_categories.each do |sub_category| %>
+                            <%= hidden_field_tag 'estimation_offers[category_id][]', category.id %>
+                            <%= hidden_field_tag 'estimation_offers[category_name][]', category.name %>
+                            <%= hidden_field_tag 'estimation_offers[estimation_id][]', @estimation.id %>
+                            <%= hidden_field_tag 'estimation_offers[template_id][]', @template.id %>
+                            <%= hidden_field_tag 'estimation_offers[sub_category_id][]', sub_category.id %>
+                            <div class="ibox-content custom-ibox">
                                 <div class="row">
                                     <div class="col-lg-8">
-                                        <%= text_field_tag 'offer[sub_category_name]', sub_category.name, :class =>  "form-control", :placeholder => 'Sub category name', readonly: true %>
+                                        <%= text_field_tag 'estimation_offers[sub_category_name][]', sub_category.name, :class =>  "form-control", :placeholder => 'Sub category name', readonly: true %>
                                     </div>
                                     <div class="col-lg-4">
-                                        <%= text_field_tag 'offer[hours]', sub_category.hours, :class =>  "form-control", :placeholder => 'Free Hours', readonly: true %>
+                                        <%= text_field_tag 'estimation_offers[hours][]', "- #{sub_category.hours} Hours", :class =>  "form-control", :placeholder => 'Free Hours', readonly: true, style: 'background-color: lightgreen;' %>
                                     </div>
                                     
                                 </div>
@@ -49,12 +54,21 @@
 </div>
 
 <script type="text/javascript">
-  $('#estimation_offer_flag').on('change', function() {
+  $( document ).ready(function() {
+    flag = $('#estimation_details_offer_flag').val();
+    myFunction(flag);
+  });
+
+  $('#estimation_details_offer_flag').on('change', function() {
     flag = this.value;
+    myFunction(flag);
+  });
+
+  function myFunction(flag) {
     if (flag == 'true'){
       $('#offer_block').show();
     } else {
       $('#offer_block').hide();
     }
-  });
+  }
 </script>

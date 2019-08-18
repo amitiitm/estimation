@@ -20,11 +20,6 @@ class EstimationsController < ApplicationController
     end 
 	end
 
-	def estimation_details
-		@template = Template.find(params[:tid])
-		@estimation = Estimation.find(params[:eid])
-	end
-
 	def functional_scope
 		@estimation = Estimation.find(functional_scope_params[:estimation_id])
 		if request.method.eql? 'POST'
@@ -65,6 +60,21 @@ class EstimationsController < ApplicationController
 			@usecase = Usecase.new
 			@usecases = @estimation.usecases
 		end
+	end
+
+	def estimation_details
+		@template = Template.find(params[:tid])
+		@estimation = Estimation.find(params[:eid])
+	end
+
+	def create_estimation_details
+		result = EstimationDetail.create_details(params)
+		if result
+			flash[:notice] = 'Estimation Details Added!'
+		else
+			flash[:warning] = 'Error Occurred!'
+		end 
+    redirect_to estimations_path
 	end
 
 	private

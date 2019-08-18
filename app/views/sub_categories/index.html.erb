@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
-    <h2>Sub Categories for Category : <%= Category.find(@category_id)&.name %></h2>
+    <h2>Sub Categories for Category : <%= @sub_categories&.first&.category&.name %></h2>
   </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -22,7 +22,7 @@
                 <tr>
                   <th>Sub Category</th>
                   <th>Class Name</th>
-                  <th>Hours</th>
+                  <th>Hours (Low/Medium/High)</th>
                   <th>On Offer</th>
                   <th>Description</th>
                   <th class="text-center">Actions</th>
@@ -38,7 +38,7 @@
                         <%= SubCategory::CLASS_NAMES.key(sub_category.class_name) %>
                       </td>
                       <td>
-                        <%= sub_category.hours %>
+                        <%= sub_category.low_hours %>/<%= sub_category.medium_hours %>/<%= sub_category.hours %>
                       </td>
                       <td>
                         <%= SubCategory::OFFER.key(sub_category.offer) %>
@@ -48,7 +48,8 @@
                       </td>
                       
                       <td class="project-actions" style="text-align: center;">
-                        <%= link_to '<i class="fa fa-list-alt"></i> Edit'.html_safe, "",  :method => 'get', :class => 'btn btn-white btn-sm' %>
+                        <%= link_to '<i class="fa fa-list-alt"></i> Edit'.html_safe, "#{edit_sub_category_path(sub_category)}?category_id=#{@category_id}",  :method => 'get', :class => 'btn btn-white btn-sm' %>
+                        <%= link_to '<i class="fa fa-trash"></i> Delete'.html_safe, "#{sub_category_path(sub_category)}?category_id=#{@category_id}",  :method => 'delete', data: { confirm: 'Are you sure?' }, :class => 'btn btn-white btn-sm' %>
                       </td>
                     </tr>
                 <% end %>

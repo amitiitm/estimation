@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_15_171100) do
+ActiveRecord::Schema.define(version: 2019_08_18_173755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,38 @@ ActiveRecord::Schema.define(version: 2019_08_15_171100) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "estimation_details", force: :cascade do |t|
+    t.integer "estimation_id"
+    t.integer "category_id"
+    t.string "category_name"
+    t.integer "sub_category_id"
+    t.string "sub_category_name"
+    t.integer "applicable"
+    t.boolean "offer_flag"
+    t.integer "per_component_low"
+    t.integer "per_component_medium"
+    t.integer "per_component_high"
+    t.integer "component_low_count"
+    t.integer "component_medium_count"
+    t.integer "component_high_count"
+    t.integer "estimated_total"
+    t.integer "overridden_total"
+    t.integer "created_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "estimation_offers", force: :cascade do |t|
+    t.integer "estimation_id"
+    t.integer "category_id"
+    t.string "category_name"
+    t.integer "sub_category_id"
+    t.string "sub_category_name"
+    t.integer "hours"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "estimations", force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
@@ -68,6 +100,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_171100) do
     t.integer "client_id"
     t.integer "created_by"
     t.text "template_ids", default: [], array: true
+    t.integer "complexity"
   end
 
   create_table "functional_scopes", force: :cascade do |t|
@@ -91,6 +124,10 @@ ActiveRecord::Schema.define(version: 2019_08_15_171100) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "offer"
+    t.string "class_name"
+    t.integer "low_hours"
+    t.integer "medium_hours"
+    t.boolean "status"
   end
 
   create_table "templates", force: :cascade do |t|
