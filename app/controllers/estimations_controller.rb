@@ -77,6 +77,11 @@ class EstimationsController < ApplicationController
     redirect_to estimations_path
 	end
 
+	def view_estimation_details
+		@template = Template.find(params[:tid])
+		@estimation = Estimation.find(params[:eid])
+	end
+
 	private
 	def estimation_params
 		params.require(:estimation).permit!

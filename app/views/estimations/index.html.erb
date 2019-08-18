@@ -37,7 +37,7 @@
                     <tr>
                       <td>
                         <% templates.each do |template| %>
-                          <%= link_to template.name, "#{categories_path}?id=#{template.id}" %><br/>
+                          <%= link_to template.name, "#{view_estimation_details_estimations_path}?tid=#{template.id}&eid=#{estimation.id}" %><br/>
                         <% end %>
                       </td>
                       <td>
