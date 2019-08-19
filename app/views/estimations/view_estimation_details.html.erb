@@ -12,7 +12,7 @@
 <%= render 'functional_scope_view' if functional_scope.present? %>
 <% estimation_template = EstimationTemplate.estimation_template_by_template_id(@template.id, @estimation.id) %>
 <% estimation_categories = EstimationDetail.estimation_categories(@template.id, @estimation.id, estimation_template&.id) %>
-<% if estimation_categories.present? && functional_scope.present?%>
+<% if estimation_categories.present? && functional_scope.present? && estimation_template.present? %>
   <% estimation_categories.each do |category| %>
 
     <div class="row">
