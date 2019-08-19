@@ -32,10 +32,10 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
     t.string "created_by"
     t.string "updated_by"
     t.string "department"
-    t.integer "role_id"
     t.boolean "status", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "role_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -55,7 +55,6 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
 
   create_table "estimation_details", force: :cascade do |t|
     t.integer "estimation_id"
-    t.integer "template_id"
     t.integer "category_id"
     t.string "category_name"
     t.integer "sub_category_id"
@@ -73,12 +72,12 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
     t.integer "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "template_id"
     t.integer "estimation_template_id"
   end
 
   create_table "estimation_offers", force: :cascade do |t|
     t.integer "estimation_id"
-    t.integer "template_id"
     t.integer "category_id"
     t.string "category_name"
     t.integer "sub_category_id"
@@ -86,6 +85,7 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
     t.integer "hours"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "template_id"
     t.integer "estimation_template_id"
   end
 
@@ -101,9 +101,7 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
   end
 
   create_table "estimations", force: :cascade do |t|
-    t.text "template_ids", default: [], array: true
     t.integer "user_id"
-    t.integer "client_id"
     t.string "name"
     t.boolean "status", default: true
     t.string "owner_email"
@@ -112,9 +110,11 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
     t.boolean "notification_flag"
     t.date "start_date"
     t.date "end_date"
-    t.integer "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "client_id"
+    t.integer "created_by"
+    t.text "template_ids", default: [], array: true
     t.integer "complexity"
   end
 
@@ -138,11 +138,11 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "offer", default: false
+    t.boolean "offer"
     t.string "class_name"
-    t.integer "low_hours", default: 0
-    t.integer "medium_hours", default: 0
-    t.boolean "status", default: true
+    t.integer "low_hours"
+    t.integer "medium_hours"
+    t.boolean "status"
   end
 
   create_table "templates", force: :cascade do |t|
@@ -155,15 +155,15 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
   create_table "usecases", force: :cascade do |t|
     t.integer "estimation_id"
     t.string "name"
-    t.integer "complexity"
-    t.integer "ui_low_count", default: 0
-    t.integer "ui_medium_count", default: 0
-    t.integer "ui_high_count", default: 0
-    t.integer "service_low_count", default: 0
-    t.integer "service_medium_count", default: 0
-    t.integer "service_high_count", default: 0
+    t.integer "ui_low_count"
+    t.integer "ui_medium_count"
+    t.integer "ui_high_count"
+    t.integer "service_low_count"
+    t.integer "service_medium_count"
+    t.integer "service_high_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "complexity"
   end
 
   create_table "users", force: :cascade do |t|
@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
     t.string "created_by"
     t.string "updated_by"
     t.text "skills"
-    t.boolean "status", default: true
+    t.boolean "status", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -2,17 +2,17 @@
     <div class="col-lg-8">
         <div class="ibox ">
             <div class="ibox-title">
-                <h5>Get Exciting Offers on Development from UI Garage only!</h5>
+                <h5 style="color: red;">Get Exciting Offers on Development from UI Garage only!</h5>
             </div>
         </div>
     </div>
     <div class="col-lg-4">
         <div class="ibox "><div class="ibox-title">
-            <%= select_tag 'estimation_details[offer_flag]', options_for_select(SubCategory::OFFER), prompt: "Add Offer", class: 'form-control', style: 'border-color: red;' %>
+            <%= select_tag 'estimation_templates[offer_flag]', options_for_select(SubCategory::OFFER), prompt: "Add Offer", class: 'form-control', style: 'border-color: red;' %>
         </div></div>
     </div>
 </div>
-
+<% @offer_total = 0 %>
 <div id="offer_block" style="display: none;">
     <% @template.categories.each do |category| %>
         <% sub_categories = category.sub_categories.offered_sub_categories %>
@@ -37,6 +37,7 @@
                             <div class="ibox-content custom-ibox">
                                 <div class="row">
                                     <div class="col-lg-8">
+                                        <% @offer_total += sub_category.hours %>
                                         <%= text_field_tag 'estimation_offers[sub_category_name][]', sub_category.name, :class =>  "form-control", :placeholder => 'Sub category name', readonly: true %>
                                     </div>
                                     <div class="col-lg-4">
@@ -55,11 +56,11 @@
 
 <script type="text/javascript">
   $( document ).ready(function() {
-    flag = $('#estimation_details_offer_flag').val();
+    flag = $('#estimation_templates_offer_flag').val();
     myFunction(flag);
   });
 
-  $('#estimation_details_offer_flag').on('change', function() {
+  $('#estimation_templates_offer_flag').on('change', function() {
     flag = this.value;
     myFunction(flag);
   });

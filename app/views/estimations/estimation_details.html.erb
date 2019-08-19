@@ -12,6 +12,13 @@
 <% create_button = false %>
 <% functional_scope = @estimation.functional_scope %>
 <%= form_tag :controller => 'estimations', :action => 'create_estimation_details', :id => 'estimation_details',:method => 'POST' do %>
+  <%= hidden_field_tag 'estimation_templates[category_ids]', @template.categories.pluck(:id).join(',') %>
+  <%= hidden_field_tag 'estimation_templates[estimation_id]', @estimation.id %>
+  <%= hidden_field_tag 'estimation_templates[template_id]', @template.id %>
+  <% 
+    @estimated_total_cost = 0
+    @overridden_total_cost = 0 
+  %>
   <% @template.categories.each do |category| %>
     <% sub_categories = category.sub_categories.active %>
     <% if sub_categories.present? %>
@@ -58,9 +65,14 @@
 
                 <!-- Calculation goes here -->  
                 <%
-                  per_component_low, per_component_medium, per_component_high = 0
-                  component_low_count, component_medium_count, component_high_count = 0
-                  estimated_total, overridden_total = 0
+                  per_component_low = 0
+                  per_component_medium = 0
+                  per_component_high = 0
+                  component_low_count = 0
+                  component_medium_count = 0
+                  component_high_count = 0
+                  estimated_total = 0
+                  overridden_total = 0
                   if sub_category.class_name == SubCategory::ONE_TIME_SETUP
                     if @estimation.complexity == Usecase::COMPLEXITY['Low']
                       estimated_total = sub_category.low_hours
@@ -97,7 +109,8 @@
                     estimated_total = low_total + medium_total + high_total
                     overridden_total = low_total + medium_total + high_total
                   end
-
+                  @overridden_total_cost += overridden_total
+                  @estimated_total_cost += estimated_total
                 %>
 
 
@@ -143,7 +156,13 @@
     <% end %>
   <% end %>
 
+  <!-- OFFER BLOCK -->
   <%= render 'offer' %>
+
+
+  <!-- TOTAL BLOCK -->
+  <%= render 'total_cost' %>
+
 <% end %>
 <% if create_button %>
   <button class="btn btn-primary btn-block" type="button" id="submit_button">Create Estimation</button>

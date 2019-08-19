@@ -5,6 +5,10 @@ class EstimationTemplate < ApplicationRecord
   
   before_save :flatten_category_ids
 
+	def self.estimation_template_by_template_id(template_id, estimation_id)
+		self.where(template_id: template_id, estimation_id: estimation_id).first
+	end
+
   private
  
   def flatten_category_ids
