@@ -3,6 +3,7 @@ class Estimation < ApplicationRecord
 	belongs_to :client
 	has_one :functional_scope
 	has_many :usecases
+	has_many :estimation_templates
 	has_many :estimation_details
 	has_many :estimation_offers
 
