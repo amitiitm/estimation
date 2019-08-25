@@ -52,6 +52,31 @@
             
           </div>
         </div>
+
+
+        <div class="ibox-content custom-ibox">
+          <div class="row">
+            <%
+             other_team = @overridden_total_cost * 19
+             ui_garage = final_hours * 15
+             savings = (other_team - ui_garage)
+            %>
+            <div class="col-lg-4">
+              <%= text_field_tag 'estimation_templates[dev_cost_other_team]', "Development Cost from Other Team : $#{other_team}", :class =>  "form-control", :placeholder => 'Reuse Factor', style: 'background-color: lightpink' %>
+            </div>
+
+            <div class="col-lg-4">
+              <%= text_field_tag 'estimation_templates[reuse_factor]', "Development Cost from UI Garage : $#{ui_garage}", :class =>  "form-control", :placeholder => 'Reuse Factor', style: 'background-color: lightgreen' %>
+            </div>
+
+            <div class="col-lg-4">
+              <%= text_field_tag 'estimation_templates[reuse_factor]', "Total Savings : $#{savings}", :class =>  "form-control", :placeholder => 'Reuse Factor', style: 'background-color: lightgreen' %>
+            </div>
+
+          </div>
+        </div>
+
+
       </div>
     </div>
   </div>

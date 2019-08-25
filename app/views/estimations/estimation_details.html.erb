@@ -121,31 +121,31 @@
                       <%= text_field_tag 'estimation_details[sub_category_name][]', sub_category.name, :class =>  "form-control custom-input", :placeholder => 'Sub category name' %>
                     </div>
                     <div class="col-lg-1 custom-col">
-                      <%= select_tag 'estimation_details[applicable][]', options_for_select(Estimation::APPLICABLE), prompt: "(Y/N)", class: 'form-control custom-input', style: 'border-color: red;' %>
+                      <%= select_tag 'estimation_details[applicable][]', options_for_select(Estimation::APPLICABLE), prompt: "(Y/N)", class: "form-control custom-input #{sub_category.class_name}", style: 'border-color: red;' %>
                     </div>
                     <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[per_component_low][]', per_component_low, :class =>  "form-control custom-input",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
+                      <%= number_field_tag 'estimation_details[per_component_low][]', per_component_low, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
                     </div>
                     <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[per_component_medium][]', per_component_medium, :class =>  "form-control custom-input",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
+                      <%= number_field_tag 'estimation_details[per_component_medium][]', per_component_medium, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
                     </div>
                     <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[per_component_high][]', per_component_high, :class =>  "form-control custom-input",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
+                      <%= number_field_tag 'estimation_details[per_component_high][]', per_component_high, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
                     </div>
                     <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[component_low_count][]', component_low_count, :class =>  "form-control custom-input",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
+                      <%= number_field_tag 'estimation_details[component_low_count][]', component_low_count, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
                     </div>
                     <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[component_medium_count][]', component_medium_count, :class =>  "form-control custom-input",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
+                      <%= number_field_tag 'estimation_details[component_medium_count][]', component_medium_count, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
                     </div>
                     <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[component_high_count][]', component_high_count, :class =>  "form-control custom-input",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
+                      <%= number_field_tag 'estimation_details[component_high_count][]', component_high_count, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
                     </div>
                     <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input", readonly: true, style: 'font-weight: bold;' %>
+                      <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input estimated_total #{sub_category.class_name}", readonly: true, style: 'font-weight: bold;' %>
                     </div>
                     <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[overridden_total][]', overridden_total, :class =>  "form-control custom-input", style: 'font-weight: bold;' %>
+                      <%= number_field_tag 'estimation_details[overridden_total][]', overridden_total, :class =>  "form-control custom-input overridden_total", style: 'font-weight: bold;' %>
                     </div>
                   </div>
                 </div>
@@ -175,4 +175,18 @@
           $('form').submit()
         });
     });
+
+
+    $(".depends_on_ui, .one_time_setup, .depends_on_usecase, .depends_on_iteration").change(function(){
+      val = this.value;
+      if(val == 1 || val == '1'){
+        estimated_val = $(this).parent().parent().find(".estimated_total").val();
+        $(this).parent().parent().find(".overridden_total").val(estimated_val);
+        $(this).css('border-color', 'green');
+      } else {
+        $(this).parent().parent().find(".overridden_total").val(0);
+        $(this).css('border-color', 'red');
+      }
+    }); 
+
 </script>

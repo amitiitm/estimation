@@ -40,8 +40,11 @@
                                         <% @offer_total += sub_category.hours %>
                                         <%= text_field_tag 'estimation_offers[sub_category_name][]', sub_category.name, :class =>  "form-control", :placeholder => 'Sub category name', readonly: true %>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-2">
                                         <%= text_field_tag 'estimation_offers[hours][]', "- #{sub_category.hours} Hours", :class =>  "form-control", :placeholder => 'Free Hours', readonly: true, style: 'background-color: lightgreen;' %>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <%= text_field_tag 'estimation_offers[hours][]', "- $#{sub_category.hours * 19}", :class =>  "form-control", :placeholder => 'Free Hours', readonly: true, style: 'background-color: lightgreen;' %>
                                     </div>
                                     
                                 </div>
