@@ -22,7 +22,11 @@ Rails.application.routes.draw do
   end
 
   resources :dashboards
-  resources :templates
+  resources :templates do
+    collection do
+      get 'all_template_json'
+    end
+  end
   resources :categories
   resources :sub_categories
   resources :estimations do

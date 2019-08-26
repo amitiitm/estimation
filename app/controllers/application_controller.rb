@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Response
 	protect_from_forgery with: :exception
   helper_method :current_user, :is_admin?, :is_sme?, :is_client?
 
