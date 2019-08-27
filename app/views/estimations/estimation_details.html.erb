@@ -36,20 +36,23 @@
               </div>
               <div class="ibox-content custom-ibox">
                 <div class="row">
-                  <div class="col-lg-3">
+                  <div class="col-lg-4">
                     Development Components
                   </div>
-                  <div class="col-lg-1" style='padding-left: 0px; font-size: smaller;'>
+                  <div class="col-lg-2">
                     Applicable(Y/N)
                   </div>
-                  <div class="col-lg-3" style='padding-left: 0px; padding-right: 0px;'>
+                  <div class="col-lg-3" style='padding-left: 0px; padding-right: 0px; display: none;'>
                     Per Component (Low / Medium / High)
                   </div>
-                  <div class="col-lg-3" style='padding-left: 0px; padding-right: 0px;'>
+                  <div class="col-lg-3" style='padding-left: 0px; padding-right: 0px; display: none;'>
                     # of Component (Low / Medium / High)
                   </div>
-                  <div class="col-lg-2" style='padding-left: 0px; padding-right: 0px; font-size: smaller;'>
-                    Total Estimated / Overridden
+                  <div class="col-lg-3">
+                    Total Estimated
+                  </div>
+                  <div class="col-lg-3">
+                    Total Overridden
                   </div>
                 </div>
               </div>
@@ -73,7 +76,7 @@
                   component_high_count = 0
                   estimated_total = 0
                   overridden_total = 0
-                  if sub_category.class_name == SubCategory::ONE_TIME_SETUP
+                  if [SubCategory::ONE_TIME_SETUP, SubCategory::DEPENDS_ON_ITERATION].include?(sub_category.class_name)
                     if @estimation.complexity == Usecase::COMPLEXITY['Low']
                       estimated_total = sub_category.low_hours
                       overridden_total = sub_category.low_hours
@@ -117,35 +120,50 @@
 
                 <div class="ibox-content custom-ibox">
                   <div class="row">
-                    <div class="col-lg-3 custom-col">
+                    <div class="col-lg-4 custom-col">
                       <%= text_field_tag 'estimation_details[sub_category_name][]', sub_category.name, :class =>  "form-control custom-input", :placeholder => 'Sub category name' %>
                     </div>
-                    <div class="col-lg-1 custom-col">
+                    <div class="col-lg-2 custom-col">
                       <%= select_tag 'estimation_details[applicable][]', options_for_select(Estimation::APPLICABLE), prompt: "(Y/N)", class: "form-control custom-input #{sub_category.class_name}", style: 'border-color: red;' %>
                     </div>
-                    <div class="col-lg-1 custom-col">
+                    <div class="col-lg-1 custom-col" style="display: none;">
                       <%= number_field_tag 'estimation_details[per_component_low][]', per_component_low, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
                     </div>
-                    <div class="col-lg-1 custom-col">
+                    <div class="col-lg-1 custom-col" style="display: none;">
                       <%= number_field_tag 'estimation_details[per_component_medium][]', per_component_medium, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
                     </div>
-                    <div class="col-lg-1 custom-col">
+                    <div class="col-lg-1 custom-col" style="display: none;">
                       <%= number_field_tag 'estimation_details[per_component_high][]', per_component_high, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
                     </div>
-                    <div class="col-lg-1 custom-col">
+                    <div class="col-lg-1 custom-col" style="display: none;">
                       <%= number_field_tag 'estimation_details[component_low_count][]', component_low_count, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
                     </div>
-                    <div class="col-lg-1 custom-col">
+                    <div class="col-lg-1 custom-col" style="display: none;">
                       <%= number_field_tag 'estimation_details[component_medium_count][]', component_medium_count, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
                     </div>
-                    <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[component_high_count][]', component_high_count, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
-                    </div>
-                    <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input estimated_total #{sub_category.class_name}", readonly: true, style: 'font-weight: bold;' %>
-                    </div>
-                    <div class="col-lg-1 custom-col">
-                      <%= number_field_tag 'estimation_details[overridden_total][]', overridden_total, :class =>  "form-control custom-input overridden_total", style: 'font-weight: bold;' %>
+
+                    <% if sub_category.class_name == SubCategory::DEPENDS_ON_ITERATION %>
+
+                      <div class="col-lg-1 custom-col">
+                        <%= number_field_tag 'estimation_details[component_high_count][]', 1, :class =>  "form-control custom-input iteration_count",:placeholder => 'Iteration', style: 'border-color: green;', min: 1 %>
+                      </div>
+                      <div class="col-lg-2 custom-col">
+                        <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input estimated_total", readonly: true, style: 'font-weight: bold;' %>
+                      </div>
+
+                    <% else %>
+
+                      <div class="col-lg-1 custom-col" style="display: none;">
+                        <%= number_field_tag 'estimation_details[component_high_count][]', component_high_count, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
+                      </div>
+                      <div class="col-lg-3 custom-col">
+                        <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input estimated_total", readonly: true, style: 'font-weight: bold;' %>
+                      </div>
+
+                    <% end %>
+
+                    <div class="col-lg-3 custom-col">
+                      <%= number_field_tag 'estimation_details[overridden_total][]', 0, :class =>  "form-control custom-input overridden_total", style: 'font-weight: bold;' %>
                     </div>
                   </div>
                 </div>
@@ -174,6 +192,7 @@
         $("#submit_button").click(function(){
           $('form').submit()
         });
+      calculateTotal();
     });
 
 
@@ -187,6 +206,50 @@
         $(this).parent().parent().find(".overridden_total").val(0);
         $(this).css('border-color', 'red');
       }
+      calculateTotal();
+    });
+
+    $(".iteration_count").keyup(function(){
+      val = this.value;
+      if(val > 0){
+        estimated_val = $(this).parent().parent().find(".estimated_total").val();
+        $(this).parent().parent().find(".overridden_total").val(estimated_val * val);
+        $(this).css('border-color', 'green');
+      } else{
+        $(this).parent().parent().find(".iteration_count").val(1);
+        estimated_val = $(this).parent().parent().find(".estimated_total").val();
+        $(this).parent().parent().find(".overridden_total").val(estimated_val * 1);
+        alert('Number of Iteration should be greater than ZERO')
+      }
+      calculateTotal();
     }); 
 
+    $("#reuse_factor").keyup(function(){
+      val = this.value;
+      if(val > 0){
+        calculateTotal();
+      } else {
+       $('#reuse_factor').val(0); 
+      }
+    });
+
+    function calculateTotal() {
+      var sum = 0;
+      $('.overridden_total').each(function(){
+          sum += parseInt($(this).val());  // Or this.innerHTML, this.innerText
+      });
+      $('#overridden_total').val(sum);
+      $('#estimated_total').val(sum);
+      var reuse_factor = $('#reuse_factor').val();
+      var offer_total = $('#offer_total').val();
+      var reuse_total = (reuse_factor * (sum - offer_total)) / 100
+      var final_hours = parseInt(sum - offer_total - reuse_total)
+      $('#final_hours').val(final_hours);
+      var dev_cost_other_team = (sum * 19)
+      $('#dev_cost_other_team').val('Development Cost from Other Team : $' + dev_cost_other_team);
+      var dev_cost_ui_garage = (final_hours * 15)
+      $('#dev_cost_ui_garage').val('Development Cost from UI Garage : $' + dev_cost_ui_garage);
+      var total_savings = 'Total Savings : $' + (dev_cost_other_team - dev_cost_ui_garage)
+      $('#total_savings').val(total_savings);
+    }
 </script>

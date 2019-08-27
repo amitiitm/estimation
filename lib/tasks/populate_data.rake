@@ -4,14 +4,14 @@ namespace :admin do
         file = File.read('public/templates.json')
         data_hash = JSON.parse(file)
         data_hash['template'].each do |template|
-            t = Template.find_or_create_by(name: template['name'])
+            t = Template.find_or_create_by(name: template['name'].strip)
             t.description = template['description']
             t.save!
             puts "Updated Template : #{t.name}"
             data_hash['categories'].each do |category|
                 category.each do |cat|
                     if template['id'] == cat['template_id']
-                        c = Category.find_or_create_by(name: cat['name'])
+                        c = Category.find_or_create_by(name: cat['name'].strip, template_id: t.id)
                         c.description = cat['description']
                         c.template_id = t.id
                         c.save!
@@ -20,12 +20,12 @@ namespace :admin do
                         data_hash['subcategories'].each do |sub|
                             sub.each do |sub_c|
                                 if sub_c['category_id'] == cat['id']
-                                    sc = SubCategory.find_or_create_by(name: sub_c['name'])
+                                    sc = SubCategory.find_or_create_by(name: sub_c['name'].strip, category_id: c.id)
                                     sc.description = sub_c['description']
                                     sc.category_id = c.id
-                                    sc.hours = sub_c['hours']
-                                    sc.low_hours = sub_c['low_hours']
-                                    sc.medium_hours = sub_c['medium_hours']
+                                    sc.hours = sub_c['hours'].presence || 0
+                                    sc.low_hours = sub_c['low_hours'].presence || 0
+                                    sc.medium_hours = sub_c['medium_hours'].presence || 0
                                     sc.offer = sub_c['offer']
                                     sc.status = sub_c['status']
                                     sc.class_name = sub_c['class_name']

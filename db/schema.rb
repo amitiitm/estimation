@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_19_074231) do
+ActiveRecord::Schema.define(version: 2019_08_27_180731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,9 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
     t.boolean "offer_flag"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "reuse_factor", default: 0
+    t.integer "offer_total"
+    t.integer "final_hours"
   end
 
   create_table "estimations", force: :cascade do |t|
@@ -142,7 +145,7 @@ ActiveRecord::Schema.define(version: 2019_08_19_074231) do
     t.string "class_name"
     t.integer "low_hours"
     t.integer "medium_hours"
-    t.boolean "status"
+    t.boolean "status", default: true
   end
 
   create_table "templates", force: :cascade do |t|
