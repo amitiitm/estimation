@@ -14,12 +14,14 @@ class SubCategory < ApplicationRecord
 	DEPENDS_ON_SERVICE = 'depends_on_service'
 	DEPENDS_ON_USECASE = 'depends_on_usecase'
 	DEPENDS_ON_ITERATION = 'depends_on_iteration'
+	DEPENDS_ON_TESTCASE = 'depends_on_testcase'
 
 	CLASS_NAMES = {
 										'Calculation Depends on UI' => DEPENDS_ON_UI, 
 										'Calculation Depends on Service' => DEPENDS_ON_SERVICE, 
 										'Calculation Depends on Usecase' => DEPENDS_ON_USECASE,
 										'Calculation Depends on Iteration' => DEPENDS_ON_ITERATION,
+										'Depends on Testcases' => DEPENDS_ON_TESTCASE,
 										'Fixed One Time Setup' => ONE_TIME_SETUP
 									}
 

@@ -42,7 +42,7 @@
               <%= number_field_tag 'estimation_templates[overridden_total]', 0, :class =>  "form-control", :id => 'overridden_total', :placeholder => 'Overridden Total', readonly: true, style: 'background-color: lightpink;' %>
             </div>
             <div class="col-lg-3">
-              <%= number_field_tag 'estimation_templates[offer_total]', @offer_total, :class =>  "form-control", :id => 'offer_total', :placeholder => 'Offer', readonly: true, style: 'background-color: lightgreen' %>
+              <%= number_field_tag 'estimation_templates[offer_total]', 0, :class =>  "form-control", :id => 'offer_total', :placeholder => 'Offer', readonly: true, style: 'background-color: lightgreen' %>
             </div>
             <% reuse_total = (25.to_f * (@overridden_total_cost - @offer_total).to_f) / 100 %>
             <% final_hours = (@overridden_total_cost - @offer_total - reuse_total).to_i %>
@@ -62,15 +62,15 @@
              savings = (other_team - ui_garage)
             %>
             <div class="col-lg-4">
-              <%= text_field_tag 'estimation_templates[dev_cost_other_team]', "", :class =>  "form-control", :id => 'dev_cost_other_team', :placeholder => 'Dev Cost', style: 'background-color: lightpink' %>
+              <%= text_field_tag 'estimation_templates[dev_cost_other_team]', "", :class =>  "form-control custom-input", :id => 'dev_cost_other_team', :placeholder => 'Dev Cost', style: 'background-color: lightpink' %>
             </div>
 
             <div class="col-lg-4">
-              <%= text_field_tag 'estimation_templates[dev_cost_ui_garage]', "Development Cost from UI Garage : $#{ui_garage}", :class =>  "form-control", :id => 'dev_cost_ui_garage', :placeholder => 'Dev Cost UI Garage', style: 'background-color: lightgreen' %>
+              <%= text_field_tag 'estimation_templates[dev_cost_ui_garage]', "Development Cost from UI Garage : $#{ui_garage}", :class =>  "form-control custom-input", :id => 'dev_cost_ui_garage', :placeholder => 'Dev Cost UI Garage', style: 'background-color: lightgreen' %>
             </div>
 
             <div class="col-lg-4">
-              <%= text_field_tag 'estimation_templates[total_savings]', "Total Savings : $#{savings}", :class =>  "form-control", :id => 'total_savings', :placeholder => 'Savings', style: 'background-color: lightgreen' %>
+              <%= text_field_tag 'estimation_templates[total_savings]', "Total Savings : $#{savings}", :class =>  "form-control custom-input", :id => 'total_savings', :placeholder => 'Savings', style: 'background-color: lightgreen' %>
             </div>
 
           </div>

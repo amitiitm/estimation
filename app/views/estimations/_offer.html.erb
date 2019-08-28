@@ -41,10 +41,11 @@
                                         <%= text_field_tag 'estimation_offers[sub_category_name][]', sub_category.name, :class =>  "form-control", :placeholder => 'Sub category name', readonly: true %>
                                     </div>
                                     <div class="col-lg-2">
+                                        <%= hidden_field_tag 'offers', sub_category.hours, class: 'sub_category_offer' %>
                                         <%= text_field_tag 'estimation_offers[hours][]', "- #{sub_category.hours} Hours", :class =>  "form-control", :placeholder => 'Free Hours', readonly: true, style: 'background-color: lightgreen;' %>
                                     </div>
                                     <div class="col-lg-2">
-                                        <%= text_field_tag 'estimation_offers[hours][]', "- $#{sub_category.hours * 19}", :class =>  "form-control", :placeholder => 'Free Hours', readonly: true, style: 'background-color: lightgreen;' %>
+                                        <%= text_field_tag 'estimation_offers[hours][]', "- $#{sub_category.hours * 19}", :class =>  "form-control", :placeholder => 'Cost', readonly: true, style: 'background-color: lightgreen;' %>
                                     </div>
                                     
                                 </div>
@@ -70,8 +71,16 @@
 
   function myFunction(flag) {
     if (flag == 'true'){
+      var offer_sum = 0;
+      $('.sub_category_offer').each(function(){
+        offer_sum += parseInt($(this).val());  // Or this.innerHTML, this.innerText
+      });
+      $('#offer_total').val(offer_sum);
+      calculateTotal();
       $('#offer_block').show();
     } else {
+      $('#offer_total').val(0);
+      calculateTotal();
       $('#offer_block').hide();
     }
   }

@@ -100,6 +100,18 @@
                     estimated_total = low_total + medium_total + high_total
                     overridden_total = low_total + medium_total + high_total
                   elsif sub_category.class_name == SubCategory::DEPENDS_ON_USECASE
+                    component_low_count = functional_scope.usecase_low_count
+                    component_medium_count = functional_scope.usecase_medium_count
+                    component_high_count = functional_scope.usecase_high_count
+                    per_component_low = sub_category.low_hours
+                    per_component_medium = sub_category.medium_hours
+                    per_component_high = sub_category.hours
+                    low_total = (component_low_count * per_component_low)
+                    medium_total = (component_medium_count * per_component_medium)
+                    high_total = (component_high_count * per_component_high)
+                    estimated_total = low_total + medium_total + high_total
+                    overridden_total = low_total + medium_total + high_total
+                  elsif sub_category.class_name == SubCategory::DEPENDS_ON_TESTCASE
                     component_low_count = (functional_scope.ui_low_count * 2)
                     component_medium_count = (functional_scope.ui_medium_count * 4)
                     component_high_count = (functional_scope.ui_high_count * 7)
