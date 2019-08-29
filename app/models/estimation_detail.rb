@@ -25,7 +25,11 @@ class EstimationDetail < ApplicationRecord
 																		offer_flag: estimation_templates[:offer_flag],
 																		reuse_factor: estimation_templates[:reuse_factor],
 																		offer_total: estimation_templates[:offer_total],
-																		final_hours: estimation_templates[:final_hours]
+																		final_hours: estimation_templates[:final_hours],
+																		pm_factor: estimation_templates[:pm_factor],
+																		pm_effort: estimation_templates[:pm_effort],
+																		mr_factor: estimation_templates[:mr_factor],
+																		mr_effort: estimation_templates[:mr_effort]
 																	)
 
 				estimation_details['estimation_id'].each_with_index do |details, index|

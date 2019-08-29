@@ -14,48 +14,49 @@
 </div>
 <% @offer_total = 0 %>
 <div id="offer_block" style="display: none;">
-    <% @template.categories.each do |category| %>
-        <% sub_categories = category.sub_categories.offered_sub_categories %>
-        <% if sub_categories.present? %>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5><%= category.name %></h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </div>
-                        </div>
-                            <% sub_categories.each do |sub_category| %>
-                            <%= hidden_field_tag 'estimation_offers[category_id][]', category.id %>
-                            <%= hidden_field_tag 'estimation_offers[category_name][]', category.name %>
-                            <%= hidden_field_tag 'estimation_offers[estimation_id][]', @estimation.id %>
-                            <%= hidden_field_tag 'estimation_offers[template_id][]', @template.id %>
-                            <%= hidden_field_tag 'estimation_offers[sub_category_id][]', sub_category.id %>
-                            <div class="ibox-content custom-ibox">
-                                <div class="row">
-                                    <div class="col-lg-8">
-                                        <% @offer_total += sub_category.hours %>
-                                        <%= text_field_tag 'estimation_offers[sub_category_name][]', sub_category.name, :class =>  "form-control", :placeholder => 'Sub category name', readonly: true %>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <%= hidden_field_tag 'offers', sub_category.hours, class: 'sub_category_offer' %>
-                                        <%= text_field_tag 'estimation_offers[hours][]', "- #{sub_category.hours} Hours", :class =>  "form-control", :placeholder => 'Free Hours', readonly: true, style: 'background-color: lightgreen;' %>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <%= text_field_tag 'estimation_offers[hours][]', "- $#{sub_category.hours * 19}", :class =>  "form-control", :placeholder => 'Cost', readonly: true, style: 'background-color: lightgreen;' %>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        <% end %>
-                    </div>
+  <% @template.categories.each do |category| %>
+    <% sub_categories = category.sub_categories.offered_sub_categories %>
+    <% if sub_categories.present? %>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="ibox ">
+            <div class="ibox-title">
+                <h5><%= category.name %></h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
                 </div>
             </div>
-        <% end %>
+            <% sub_categories.each do |sub_category| %>
+              <%= hidden_field_tag 'estimation_offers[category_id][]', category.id %>
+              <%= hidden_field_tag 'estimation_offers[category_name][]', category.name %>
+              <%= hidden_field_tag 'estimation_offers[estimation_id][]', @estimation.id %>
+              <%= hidden_field_tag 'estimation_offers[template_id][]', @template.id %>
+              <%= hidden_field_tag 'estimation_offers[sub_category_id][]', sub_category.id %>
+              <div class="ibox-content custom-ibox">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <% @offer_total += sub_category.hours %>
+                        <%= text_field_tag 'estimation_offers[sub_category_name][]', sub_category.name, :class =>  "form-control", :placeholder => 'Sub category name', readonly: true, style: 'text-decoration: line-through; text-decoration-color: red; color: black;' %>
+                    </div>
+                    <div class="col-lg-2">
+                        <%= hidden_field_tag 'offers', sub_category.hours, class: 'sub_category_offer' %>
+                        <%= text_field_tag 'estimation_offers[hours][]', "- #{sub_category.hours} Hours", :class =>  "form-control", :placeholder => 'Free Hours', readonly: true %>
+                    </div>
+                    <div class="col-lg-2">
+                        <%= text_field_tag 'estimation_offers[hours][]', "- $#{sub_category.hours * 19}", :class =>  "form-control", :placeholder => 'Cost', readonly: true %>
+                    </div>
+                    
+                </div>
+
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
     <% end %>
+  <% end %>
 </div>
 
 <script type="text/javascript">

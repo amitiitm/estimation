@@ -20,6 +20,17 @@ class EstimationsController < ApplicationController
     end 
 	end
 
+	def destroy
+		estimation = Estimation.find_by(id: params[:id])
+		if estimation.present?
+			estimation.destroy
+			flash[:notice] = 'Estimation and linked Records are deleted successfully.'
+		else
+			flash[:warning] = 'Estimation Not Found'
+		end
+		redirect_to estimations_path
+	end
+
 	def functional_scope
 		@estimation = Estimation.find(functional_scope_params[:estimation_id])
 		if request.method.eql? 'POST'

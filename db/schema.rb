@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_27_180731) do
+ActiveRecord::Schema.define(version: 2019_08_29_072331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,10 @@ ActiveRecord::Schema.define(version: 2019_08_27_180731) do
     t.integer "reuse_factor", default: 0
     t.integer "offer_total"
     t.integer "final_hours"
+    t.integer "pm_factor", default: 0
+    t.integer "pm_effort", default: 0
+    t.integer "mr_factor", default: 0
+    t.integer "mr_effort", default: 0
   end
 
   create_table "estimations", force: :cascade do |t|

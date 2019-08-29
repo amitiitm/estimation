@@ -241,7 +241,30 @@
       if(val > 0){
         calculateTotal();
       } else {
-       $('#reuse_factor').val(0); 
+       $('#reuse_factor').val(0);
+       calculateTotal();
+      }
+    });
+
+    $("#pm_factor").change(function(){
+      val = this.value;
+      if(val > 6){
+        calculateTotal();
+      } else {
+        alert('cannot be less then 7%')
+        $('#pm_factor').val(7);
+        calculateTotal();
+      }
+    });
+
+    $("#mr_factor").change(function(){
+      val = this.value;
+      if(val > 4){
+        calculateTotal();
+      } else {
+        alert('cannot be less then 5%')
+        $('#mr_factor').val(5);
+        calculateTotal();
       }
     });
 
@@ -256,12 +279,21 @@
       var offer_total = $('#offer_total').val();
       var reuse_total = (reuse_factor * (sum - offer_total)) / 100
       var final_hours = parseInt(sum - offer_total - reuse_total)
+      // PM & Meeting Reviews Calculation
+      var pm_factor = $('#pm_factor').val();
+      var mr_factor = $('#mr_factor').val();
+      var pm_effort = parseInt((pm_factor * final_hours) / 100)
+      var mr_effort = parseInt((mr_factor * final_hours) / 100)
+      $('#pm_effort').val(pm_effort);
+      $('#mr_effort').val(mr_effort);
+      final_hours = final_hours + pm_effort + mr_effort
+      // END
       $('#final_hours').val(final_hours);
       var dev_cost_other_team = (sum * 19)
-      $('#dev_cost_other_team').val('Development Cost from Other Team : $' + dev_cost_other_team);
+      $('#dev_cost_other_team').val('$' + dev_cost_other_team);
       var dev_cost_ui_garage = (final_hours * 15)
-      $('#dev_cost_ui_garage').val('Development Cost from UI Garage : $' + dev_cost_ui_garage);
-      var total_savings = 'Total Savings : $' + (dev_cost_other_team - dev_cost_ui_garage)
+      $('#dev_cost_ui_garage').val('$' + dev_cost_ui_garage);
+      var total_savings = '$' + (dev_cost_other_team - dev_cost_ui_garage)
       $('#total_savings').val(total_savings);
     }
 </script>

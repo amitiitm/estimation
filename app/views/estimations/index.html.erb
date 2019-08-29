@@ -82,6 +82,11 @@
                                 </li>
                               <% end %>
                             <% end %>
+
+                            <li>
+                              <%= link_to '<i class="fa fa-trash"></i> Delete'.html_safe, "#{estimation_path(estimation)}",  :method => 'delete', data: { confirm: 'Are you sure, this will delete all estimation with usecase, functional scope, efforts, offers etc...?' }, :class => 'btn btn-white btn-sm' %>
+                            </li>
+
                         </ul>
                       </td>
                     </tr>

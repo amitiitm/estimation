@@ -54,6 +54,61 @@
         </div>
 
 
+        <!--PROJECT MANAGEMENT-->
+        <div class="ibox-content custom-ibox">
+          <div class="row">
+            <div class="col-lg-3">
+              PM Factor(%)
+            </div>
+            <div class="col-lg-3">
+              PM Efforts
+            </div>
+            <div class="col-lg-3">
+              Meeting & Reviews(%)
+            </div>
+            <div class="col-lg-3">
+              Meeting & Reviews Efforts
+            </div>
+          </div>
+        </div>
+
+        <div class="ibox-content custom-ibox">
+          <div class="row">
+            <div class="col-lg-3">
+              <%= number_field_tag 'estimation_templates[pm_factor]', 10, :class =>  "form-control", :id => 'pm_factor', :placeholder => 'PM Factor' %>
+            </div>
+            <div class="col-lg-3">
+              <%= number_field_tag 'estimation_templates[pm_effort]', "", :class =>  "form-control", :id => 'pm_effort', :placeholder => 'PM Effort', readonly: true %>
+            </div>
+            <div class="col-lg-3">
+              <%= number_field_tag 'estimation_templates[mr_factor]', 7, :class =>  "form-control", :id => 'mr_factor', :placeholder => 'MR Factor' %>
+            </div>
+            <div class="col-lg-3">
+              <%= number_field_tag 'estimation_templates[mr_effort]', "", :class =>  "form-control", :id => 'mr_effort', :placeholder => 'MR Effort', readonly: true %>
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+
+
+        <div class="ibox-content custom-ibox">
+          <div class="row">
+            <div class="col-lg-4">
+              Dev Cost from Other Teams
+            </div>
+            <div class="col-lg-4">
+              Dev Cost from UI Garage
+            </div>
+            <div class="col-lg-4">
+              Total Savings
+            </div>
+          </div>
+        </div>
+
         <div class="ibox-content custom-ibox">
           <div class="row">
             <%
@@ -62,18 +117,19 @@
              savings = (other_team - ui_garage)
             %>
             <div class="col-lg-4">
-              <%= text_field_tag 'estimation_templates[dev_cost_other_team]', "", :class =>  "form-control custom-input", :id => 'dev_cost_other_team', :placeholder => 'Dev Cost', style: 'background-color: lightpink' %>
+              <%= text_field_tag 'estimation_templates[dev_cost_other_team]', "", :class =>  "form-control", :id => 'dev_cost_other_team', :placeholder => 'Dev Cost', style: 'background-color: lightpink' %>
             </div>
 
             <div class="col-lg-4">
-              <%= text_field_tag 'estimation_templates[dev_cost_ui_garage]', "Development Cost from UI Garage : $#{ui_garage}", :class =>  "form-control custom-input", :id => 'dev_cost_ui_garage', :placeholder => 'Dev Cost UI Garage', style: 'background-color: lightgreen' %>
+              <%= text_field_tag 'estimation_templates[dev_cost_ui_garage]', "Development Cost from UI Garage : $#{ui_garage}", :class =>  "form-control", :id => 'dev_cost_ui_garage', :placeholder => 'Dev Cost UI Garage', style: 'background-color: lightgreen' %>
             </div>
 
             <div class="col-lg-4">
-              <%= text_field_tag 'estimation_templates[total_savings]', "Total Savings : $#{savings}", :class =>  "form-control custom-input", :id => 'total_savings', :placeholder => 'Savings', style: 'background-color: lightgreen' %>
+              <%= text_field_tag 'estimation_templates[total_savings]', "Total Savings : $#{savings}", :class =>  "form-control", :id => 'total_savings', :placeholder => 'Savings', style: 'background-color: lightgreen' %>
             </div>
 
           </div>
+
         </div>
 
 

@@ -1,11 +1,11 @@
 class Estimation < ApplicationRecord
 	belongs_to :user
 	belongs_to :client
-	has_one :functional_scope
-	has_many :usecases
-	has_many :estimation_templates
-	has_many :estimation_details
-	has_many :estimation_offers
+	has_one :functional_scope, :dependent => :destroy
+	has_many :usecases, :dependent => :destroy
+	has_many :estimation_templates, :dependent => :destroy
+	has_many :estimation_details, :dependent => :destroy
+	has_many :estimation_offers, :dependent => :destroy
 
 	before_save :flatten_template_ids
  
