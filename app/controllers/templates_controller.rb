@@ -41,6 +41,19 @@ class TemplatesController < ApplicationController
     end 
 	end
 
+
+	def destroy
+		template = Template.find_by(id: params[:id])
+		if template.present?
+			template.destroy
+			flash[:notice] = 'Template deleted successfully.'
+		else
+			flash[:warning] = 'Template Not Found'
+		end
+		redirect_to templates_path
+	end
+
+
 	private
 	def template_params
 		params.require(:template).permit(:name, :description)

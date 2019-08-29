@@ -1,5 +1,5 @@
 class Template < ApplicationRecord
 	validates :name, :uniqueness => true
   validates :name, :presence => true
-	has_many :categories
+	has_many :categories, :dependent => :destroy
 end

@@ -38,6 +38,7 @@
                       
                       <td class="project-actions" style="text-align: center;">
                         <%= link_to '<i class="fa fa-list-alt"></i> Categories'.html_safe, "#{categories_path}?id=#{template.id}",  :method => 'get', :class => 'btn btn-white btn-sm' %>
+                        <%= link_to '<i class="fa fa-trash"></i> Delete'.html_safe, "#{template_path(template)}",  :method => 'delete', data: { confirm: 'Are you sure?' }, :class => 'btn btn-white btn-sm' %>
                       </td>
                     </tr>
                 <% end %>
