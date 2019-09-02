@@ -28,20 +28,23 @@
             </div>
             <div class="ibox-content custom-ibox">
               <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                   Development Components
                 </div>
-                <div class="col-lg-1">
+                <div class="col-lg-2">
                   Applicable(Y/N)
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3" style='display: none;'>
                   Per Component (Low / Medium / High)
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3" style='display: none;'>
                   # of Component (Low / Medium / High)
                 </div>
-                <div class="col-lg-2">
-                  Total Estimated / Overridden
+                <div class="col-lg-3">
+                  Total Estimated
+                </div>
+                <div class="col-lg-3">
+                  Total Overridden
                 </div>
               </div>
             </div>
@@ -50,6 +53,7 @@
             <% details.each do |detail| %>
               <!-- Calculation goes here -->  
               <%
+                sub_category = SubCategory.find_by(id: detail.sub_category_id)
                 per_component_low = detail.per_component_low
                 per_component_medium = detail.per_component_medium
                 per_component_high = detail.per_component_high
@@ -65,34 +69,49 @@
 
               <div class="ibox-content custom-ibox">
                 <div class="row">
-                  <div class="col-lg-3 custom-col">
+                  <div class="col-lg-4 custom-col">
                     <%= text_field_tag 'estimation_details[sub_category_name][]', sub_category_name, :class =>  "form-control custom-input", :placeholder => 'Sub category name', readonly: true %>
                   </div>
-                  <div class="col-lg-1 custom-col">
+                  <div class="col-lg-2 custom-col">
                     <%= text_field_tag 'estimation_details[applicable][]', Estimation::APPLICABLE.key(detail.applicable), :class =>  "form-control custom-input", :placeholder => '(Y/N)', readonly: true %>
                   </div>
-                  <div class="col-lg-1 custom-col">
+                  <div class="col-lg-1 custom-col" style='display: none;'>
                     <%= number_field_tag 'estimation_details[per_component_low][]', per_component_low, :class =>  "form-control custom-input",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
                   </div>
-                  <div class="col-lg-1 custom-col">
+                  <div class="col-lg-1 custom-col" style='display: none;'>
                     <%= number_field_tag 'estimation_details[per_component_medium][]', per_component_medium, :class =>  "form-control custom-input",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
                   </div>
-                  <div class="col-lg-1 custom-col">
+                  <div class="col-lg-1 custom-col" style='display: none;'>
                     <%= number_field_tag 'estimation_details[per_component_high][]', per_component_high, :class =>  "form-control custom-input",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
                   </div>
-                  <div class="col-lg-1 custom-col">
+                  <div class="col-lg-1 custom-col" style='display: none;'>
                     <%= number_field_tag 'estimation_details[component_low_count][]', component_low_count, :class =>  "form-control custom-input",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
                   </div>
-                  <div class="col-lg-1 custom-col">
+                  <div class="col-lg-1 custom-col" style='display: none;'>
                     <%= number_field_tag 'estimation_details[component_medium_count][]', component_medium_count, :class =>  "form-control custom-input",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
                   </div>
-                  <div class="col-lg-1 custom-col">
-                    <%= number_field_tag 'estimation_details[component_high_count][]', component_high_count, :class =>  "form-control custom-input",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
-                  </div>
-                  <div class="col-lg-1 custom-col">
-                    <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input", readonly: true, style: 'font-weight: bold;' %>
-                  </div>
-                  <div class="col-lg-1 custom-col">
+
+                  <% if sub_category.class_name == SubCategory::DEPENDS_ON_ITERATION %>
+
+                    <div class="col-lg-1 custom-col">
+                      <%= number_field_tag 'estimation_details[component_high_count][]', component_high_count, :class =>  "form-control custom-input iteration_count",:placeholder => 'Iteration', readonly: true, style: 'border-color: green;', min: 1 %>
+                    </div>
+                    <div class="col-lg-2 custom-col">
+                      <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input estimated_total", readonly: true, style: 'font-weight: bold;' %>
+                    </div>
+
+                  <% else %>
+
+                    <div class="col-lg-1 custom-col" style="display: none;">
+                      <%= number_field_tag 'estimation_details[component_high_count][]', component_high_count, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
+                    </div>
+                    <div class="col-lg-3 custom-col">
+                      <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input estimated_total", readonly: true, style: 'font-weight: bold;' %>
+                    </div>
+
+                  <% end %>
+
+                  <div class="col-lg-3 custom-col">
                     <%= number_field_tag 'estimation_details[overridden_total][]', overridden_total, :class =>  "form-control custom-input", style: 'font-weight: bold;', readonly: true %>
                   </div>
                 </div>
@@ -136,7 +155,7 @@
                 <div class="ibox-content custom-ibox">
                     <div class="row">
                         <div class="col-lg-8">
-                            <%= text_field_tag 'estimation_offers[sub_category_name][]', offer.sub_category_name, :class =>  "form-control", :placeholder => 'Sub category name', readonly: true %>
+                            <%= text_field_tag 'estimation_offers[sub_category_name][]', offer.sub_category_name, :class =>  "form-control", :placeholder => 'Sub category name', readonly: true, style: 'text-decoration: line-through; text-decoration-color: red; color: black;' %>
                         </div>
                         <div class="col-lg-4">
                             <%= text_field_tag 'estimation_offers[hours][]', "- #{offer.hours} Hours", :class =>  "form-control", :placeholder => 'Free Hours', readonly: true, style: 'background-color: lightgreen;' %>
@@ -205,6 +224,81 @@
               
             </div>
           </div>
+
+
+          <!--PROJECT MANAGEMENT-->
+          <div class="ibox-content custom-ibox">
+            <div class="row">
+              <div class="col-lg-3">
+                PM Factor(%)
+              </div>
+              <div class="col-lg-3">
+                PM Efforts
+              </div>
+              <div class="col-lg-3">
+                Meeting & Reviews(%)
+              </div>
+              <div class="col-lg-3">
+                Meeting & Reviews Efforts
+              </div>
+            </div>
+          </div>
+
+          <div class="ibox-content custom-ibox">
+            <div class="row">
+              <div class="col-lg-3">
+                <%= number_field_tag 'estimation_templates[pm_factor]', estimation_template.pm_factor, :class =>  "form-control", :id => 'pm_factor', :placeholder => 'PM Factor', readonly: true %>
+              </div>
+              <div class="col-lg-3">
+                <%= number_field_tag 'estimation_templates[pm_effort]', estimation_template.pm_effort, :class =>  "form-control", :id => 'pm_effort', :placeholder => 'PM Effort', readonly: true %>
+              </div>
+              <div class="col-lg-3">
+                <%= number_field_tag 'estimation_templates[mr_factor]', estimation_template.mr_factor, :class =>  "form-control", :id => 'mr_factor', :placeholder => 'MR Factor', readonly: true %>
+              </div>
+              <div class="col-lg-3">
+                <%= number_field_tag 'estimation_templates[mr_effort]', estimation_template.mr_effort, :class =>  "form-control", :id => 'mr_effort', :placeholder => 'MR Effort', readonly: true %>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="ibox-content custom-ibox">
+            <div class="row">
+              <div class="col-lg-4">
+                Dev Cost from Other Teams
+              </div>
+              <div class="col-lg-4">
+                Dev Cost from UI Garage
+              </div>
+              <div class="col-lg-4">
+                Total Savings
+              </div>
+            </div>
+          </div>
+
+          <div class="ibox-content custom-ibox">
+            <div class="row">
+              <%
+              other_team = estimation_template.overridden_total * 19
+              ui_garage = estimation_template.final_hours * 15
+              savings = (other_team - ui_garage)
+              %>
+              <div class="col-lg-4">
+                <%= text_field_tag 'estimation_templates[dev_cost_other_team]', other_team, :class =>  "form-control", :id => 'dev_cost_other_team', :placeholder => 'Dev Cost', style: 'background-color: lightpink', readonly: true %>
+              </div>
+
+              <div class="col-lg-4">
+                <%= text_field_tag 'estimation_templates[dev_cost_ui_garage]', ui_garage, :class =>  "form-control", :id => 'dev_cost_ui_garage', :placeholder => 'Dev Cost UI Garage', style: 'background-color: lightgreen', readonly: true %>
+              </div>
+
+              <div class="col-lg-4">
+                <%= text_field_tag 'estimation_templates[total_savings]', savings, :class =>  "form-control", :id => 'total_savings', :placeholder => 'Savings', style: 'background-color: lightgreen', readonly: true %>
+              </div>
+
+            </div>
+          </div>
+
+
         </div>
       </div>
     </div>
