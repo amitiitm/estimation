@@ -64,7 +64,7 @@ class EstimationsController < ApplicationController
 	    if usecase.save   
 	      flash[:notice] = 'Usecase added!'   
 	    else   
-	      flash[:warning] = estimation.errors.full_messages
+	      flash[:warning] = usecase.errors.full_messages
 	    end
 	    redirect_to "#{usecase_estimations_path}?usecase[estimation_id]=#{usecase_params[:estimation_id]}"
 	  else
