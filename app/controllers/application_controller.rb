@@ -11,7 +11,19 @@ class ApplicationController < ActionController::Base
 
   def authenticate_admin_role
     unless is_admin?
-      redirect_to dashboards_path
+      if is_sme?
+        redirect_to dashboards_path
+      elsif is_client?
+        flash[:warning] = 'UnAuthorized Access!'
+        redirect_to estimations_path
+      end 
+    end
+  end
+
+  def authenticate_sme_and_admin_role
+    unless is_admin? || is_sme?
+      flash[:warning] = 'UnAuthorized Access!'
+      redirect_to estimations_path
     end
   end
 

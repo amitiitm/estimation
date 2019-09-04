@@ -28,11 +28,13 @@
                 </div>
             </li>
 
-            <li class="<%= is_active_controller('dashboards') %>">
-                <%= link_to dashboards_path do %>
-                    <i class="fa fa-th-large"></i> <span class="nav-label" data-i18n="nav.dashboard">Dashboard</span> 
-                <% end %>
-            </li>
+            <% if is_admin? || is_sme? %>
+                <li class="<%= is_active_controller('dashboards') %>">
+                    <%= link_to dashboards_path do %>
+                        <i class="fa fa-th-large"></i> <span class="nav-label" data-i18n="nav.dashboard">Dashboard</span> 
+                    <% end %>
+                </li>
+            <% end %>
 
             <% if is_admin? %>
                 <li class="<%= is_active_controller('users') %>">

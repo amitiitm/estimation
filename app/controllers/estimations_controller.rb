@@ -1,5 +1,6 @@
 class EstimationsController < ApplicationController
 	before_action :authenticate_user
+	before_action :authenticate_sme_and_admin_role, except: [:index, :view_estimation_details]
 
 	def index
     @estimations = Estimation.paginate(page: params[:page], per_page: PAGINATION_COUNT).order("created_at asc")
@@ -76,12 +77,26 @@ class EstimationsController < ApplicationController
 	def estimation_details
 		@template = Template.find(params[:tid])
 		@estimation = Estimation.find(params[:eid])
+		@estimation_template = EstimationTemplate.find_by(estimation_id: @estimation.id, template_id: @template.id)
+		if @estimation_template.present?
+			render 'estimations/edit/estimation_details'
+		end
 	end
 
 	def create_estimation_details
 		result = EstimationDetail.create_details(params)
 		if result
 			flash[:notice] = 'Estimation Details Added!'
+		else
+			flash[:warning] = 'Error Occurred!'
+		end 
+    redirect_to estimations_path
+	end
+
+	def update_estimation_details
+		result = EstimationDetail.update_details(params)
+		if result
+			flash[:notice] = 'Estimation Details Updated!'
 		else
 			flash[:warning] = 'Error Occurred!'
 		end 

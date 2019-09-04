@@ -1,0 +1,458 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5><%= @template.name %> Estimation for <%= @estimation.name %></h5>
+            </div>
+        </div>
+    </div>
+</div>
+<% functional_scope = @estimation.functional_scope %>
+
+<%= render 'estimations/functional_scope_view' if functional_scope.present? %>
+<% estimation_template = EstimationTemplate.estimation_template_by_template_id(@template.id, @estimation.id) %>
+<% estimation_categories = EstimationDetail.estimation_categories(@template.id, @estimation.id, estimation_template&.id) %>
+<% if estimation_categories.present? && functional_scope.present? && estimation_template.present? %>
+
+
+  <%= form_tag :controller => 'estimations', :action => 'update_estimation_details', :id => 'estimation_details',:method => 'POST' do %>
+    <%= hidden_field_tag 'estimation_templates[id]', estimation_template.id %>
+    <%= hidden_field_tag 'estimation_templates[estimation_id]', @estimation.id %>
+    <%= hidden_field_tag 'estimation_templates[template_id]', @template.id %>
+
+    <% estimation_categories.each do |category| %>
+
+      <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+              <div class="ibox-title">
+                  <h5><%= category.category_name %></h5>
+                  <div class="ibox-tools">
+                      <a class="collapse-link">
+                          <i class="fa fa-chevron-up"></i>
+                      </a>
+                  </div>
+              </div>
+              <div class="ibox-content custom-ibox">
+                <div class="row">
+                  <div class="col-lg-4">
+                    Development Components
+                  </div>
+                  <div class="col-lg-2">
+                    Applicable(Y/N)
+                  </div>
+                  <div class="col-lg-3" style='display: none;'>
+                    Per Component (Low / Medium / High)
+                  </div>
+                  <div class="col-lg-3" style='display: none;'>
+                    # of Component (Low / Medium / High)
+                  </div>
+                  <div class="col-lg-3">
+                    Total Estimated
+                  </div>
+                  <div class="col-lg-3">
+                    Total Overridden
+                  </div>
+                </div>
+              </div>
+              <% details = EstimationDetail.estimation_details_by_template(@template.id, @estimation.id, category.category_id, estimation_template.id) %>
+              
+              <% details.each do |detail| %>
+                <%= hidden_field_tag 'estimation_details[id][]', detail.id %>
+                <%= hidden_field_tag 'estimation_details[estimation_id][]', @estimation.id %>
+                <%= hidden_field_tag 'estimation_details[estimation_template_id][]', estimation_template.id %>
+                <!-- Calculation goes here -->  
+                <%
+                  sub_category = SubCategory.find_by(id: detail.sub_category_id)
+                  per_component_low = detail.per_component_low
+                  per_component_medium = detail.per_component_medium
+                  per_component_high = detail.per_component_high
+                  component_low_count = detail.component_low_count
+                  component_medium_count = detail.component_medium_count
+                  component_high_count = detail.component_high_count
+                  estimated_total = detail.estimated_total
+                  overridden_total = detail.overridden_total
+                  sub_category_name = detail.sub_category_name
+                %>
+
+
+
+                <div class="ibox-content custom-ibox">
+                  <div class="row">
+                    <div class="col-lg-4 custom-col">
+                      <%= text_field_tag 'estimation_details[sub_category_name][]', sub_category_name, :class =>  "form-control custom-input", :placeholder => 'Sub category name', readonly: true %>
+                    </div>
+
+                    <div class="col-lg-2 custom-col">
+                      <% color = (detail.applicable == 1 ? 'green' : 'red')%>
+                      <%= select_tag 'estimation_details[applicable][]', options_for_select(Estimation::APPLICABLE, selected: detail.applicable), prompt: "(Y/N)", class: "form-control custom-input #{sub_category.class_name}", style: "border-color: #{color};" %>
+                    </div>
+
+                    <div class="col-lg-1 custom-col" style='display: none;'>
+                      <%= number_field_tag 'estimation_details[per_component_low][]', per_component_low, :class =>  "form-control custom-input",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col" style='display: none;'>
+                      <%= number_field_tag 'estimation_details[per_component_medium][]', per_component_medium, :class =>  "form-control custom-input",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col" style='display: none;'>
+                      <%= number_field_tag 'estimation_details[per_component_high][]', per_component_high, :class =>  "form-control custom-input",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col" style='display: none;'>
+                      <%= number_field_tag 'estimation_details[component_low_count][]', component_low_count, :class =>  "form-control custom-input",:placeholder => 'Low', readonly: true, style: 'border-color: yellow;' %>
+                    </div>
+                    <div class="col-lg-1 custom-col" style='display: none;'>
+                      <%= number_field_tag 'estimation_details[component_medium_count][]', component_medium_count, :class =>  "form-control custom-input",:placeholder => 'Medium', readonly: true, style: 'border-color: orange;' %>
+                    </div>
+
+                    <% if sub_category.class_name == SubCategory::DEPENDS_ON_ITERATION %>
+
+                      <div class="col-lg-1 custom-col">
+                        <%= number_field_tag 'estimation_details[component_high_count][]', component_high_count, :class =>  "form-control custom-input iteration_count",:placeholder => 'Iteration', style: 'border-color: green;', min: 1 %>
+                      </div>
+                      <div class="col-lg-2 custom-col">
+                        <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input estimated_total", readonly: true, style: 'font-weight: bold;' %>
+                      </div>
+
+                    <% else %>
+
+                      <div class="col-lg-1 custom-col" style="display: none;">
+                        <%= number_field_tag 'estimation_details[component_high_count][]', component_high_count, :class =>  "form-control custom-input #{sub_category.class_name}",:placeholder => 'High', readonly: true, style: 'border-color: green;' %>
+                      </div>
+                      <div class="col-lg-3 custom-col">
+                        <%= number_field_tag 'estimation_details[estimated_total][]', estimated_total, :class =>  "form-control custom-input estimated_total", readonly: true, style: 'font-weight: bold;' %>
+                      </div>
+
+                    <% end %>
+
+                    <div class="col-lg-3 custom-col">
+                      <%= number_field_tag 'estimation_details[overridden_total][]', overridden_total, :class =>  "form-control custom-input overridden_total", style: 'font-weight: bold;', readonly: true %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+      </div>
+    <% end %>
+
+    <!-- OFFER -->
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Get Exciting Offers on Development from UI Garage only!</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox "><div class="ibox-title">
+                <%= select_tag 'estimation_templates[offer_flag]', options_for_select(SubCategory::OFFER, selected: estimation_template.offer_flag), prompt: "Add Offer", class: 'form-control', style: 'border-color: red;' %>
+            </div></div>
+        </div>
+    </div>
+
+    <div id="offer_block">
+      <% estimation_template.estimation_offers.each do |offer| %>
+        <div class="row">
+            <div class="col-lg-12">
+              <div class="ibox ">
+                <div class="ibox-title">
+                  <h5><%= offer.category_name %></h5>
+                  <div class="ibox-tools">
+                      <a class="collapse-link">
+                          <i class="fa fa-chevron-up"></i>
+                      </a>
+                  </div>
+                </div>
+                  <div class="ibox-content custom-ibox">
+                      <div class="row">
+                          <div class="col-lg-8">
+                              <%= text_field_tag 'estimation_offers[sub_category_name][]', offer.sub_category_name, :class =>  "form-control", :placeholder => 'Sub category name', readonly: true, style: 'text-decoration: line-through; text-decoration-color: red; color: black;' %>
+                          </div>
+                          <div class="col-lg-2">
+                              <%= hidden_field_tag 'offers', offer.hours, class: 'sub_category_offer' %>
+                              <%= text_field_tag 'estimation_offers[hours][]', "- #{offer.hours} Hours", :class =>  "form-control", :placeholder => 'Free Hours', readonly: true, style: 'background-color: lightgreen;' %>
+                          </div>
+                          <div class="col-lg-2">
+                              <%= text_field_tag 'estimation_offers[hours][]', "- $#{offer.hours * 19}", :class =>  "form-control", :placeholder => 'Cost', readonly: true %>
+                          </div>
+                          
+                      </div>
+                  </div>
+              </div>
+            </div>
+        </div>
+      <% end %>
+    </div>
+
+
+
+    <div id="total_cost_block">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="ibox ">
+            <div class="ibox-title">
+                <h5 style="font-size: x-large; color: red;">Total Cost</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content custom-ibox">
+              <div class="row">
+                <div class="col-lg-2" style="color: red;">
+                  Reuse Factor(%)
+                </div>
+                <div class="col-lg-2">
+                  Estimated Total
+                </div>
+                <div class="col-lg-2">
+                  Overridden Total
+                </div>
+                <div class="col-lg-3" style="color: red;">
+                  Free Hours
+                </div>
+                <div class="col-lg-3">
+                  Final Hours
+                </div>
+              </div>
+            </div>
+            <div class="ibox-content custom-ibox">
+              <div class="row">
+
+                <div class="col-lg-2">
+                  <%= number_field_tag 'estimation_templates[reuse_factor]', estimation_template.reuse_factor, :class =>  "form-control", :id => 'reuse_factor', :placeholder => 'Reuse Factor', style: 'background-color: lightgreen' %>
+                </div>
+                <div class="col-lg-2">
+                  <%= number_field_tag 'estimation_templates[estimated_total]', estimation_template.estimated_total, :class =>  "form-control", :id => 'estimated_total' , :placeholder => 'Reuse Factor', readonly: true, style: 'background-color: lightpink;' %>
+                </div>
+                <div class="col-lg-2">
+                  <%= number_field_tag 'estimation_templates[overridden_total]', estimation_template.overridden_total, :class =>  "form-control", :id => 'overridden_total', :placeholder => 'Reuse Factor', readonly: true, style: 'background-color: lightpink;' %>
+                </div>
+                <div class="col-lg-3">
+                  <%= number_field_tag 'estimation_templates[offer_total]', estimation_template.offer_total, :class =>  "form-control", :id => 'offer_total', :placeholder => 'Reuse Factor', readonly: true, style: 'background-color: lightgreen' %>
+                </div>
+
+                <div class="col-lg-3">
+                  <%= number_field_tag 'estimation_templates[final_hours]', estimation_template.final_hours, :class =>  "form-control", :id => 'final_hours', :placeholder => 'Reuse Factor', readonly: true, style: 'background-color: lightskyblue;' %>
+                </div>
+                
+              </div>
+            </div>
+
+
+            <!--PROJECT MANAGEMENT-->
+            <div class="ibox-content custom-ibox">
+              <div class="row">
+                <div class="col-lg-3">
+                  PM Factor(%)
+                </div>
+                <div class="col-lg-3">
+                  PM Efforts
+                </div>
+                <div class="col-lg-3">
+                  Meeting & Reviews(%)
+                </div>
+                <div class="col-lg-3">
+                  Meeting & Reviews Efforts
+                </div>
+              </div>
+            </div>
+
+            <div class="ibox-content custom-ibox">
+              <div class="row">
+                <div class="col-lg-3">
+                  <%= number_field_tag 'estimation_templates[pm_factor]', estimation_template.pm_factor, :class =>  "form-control", :id => 'pm_factor', :placeholder => 'PM Factor' %>
+                </div>
+                <div class="col-lg-3">
+                  <%= number_field_tag 'estimation_templates[pm_effort]', estimation_template.pm_effort, :class =>  "form-control", :id => 'pm_effort', :placeholder => 'PM Effort', readonly: true %>
+                </div>
+                <div class="col-lg-3">
+                  <%= number_field_tag 'estimation_templates[mr_factor]', estimation_template.mr_factor, :class =>  "form-control", :id => 'mr_factor', :placeholder => 'MR Factor' %>
+                </div>
+                <div class="col-lg-3">
+                  <%= number_field_tag 'estimation_templates[mr_effort]', estimation_template.mr_effort, :class =>  "form-control", :id => 'mr_effort', :placeholder => 'MR Effort', readonly: true %>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="ibox-content custom-ibox">
+              <div class="row">
+                <div class="col-lg-4">
+                  Dev Cost from Other Teams
+                </div>
+                <div class="col-lg-4">
+                  Dev Cost from UI Garage
+                </div>
+                <div class="col-lg-4">
+                  Total Savings
+                </div>
+              </div>
+            </div>
+
+            <div class="ibox-content custom-ibox">
+              <div class="row">
+                <%
+                other_team = estimation_template.overridden_total * 19
+                ui_garage = estimation_template.final_hours * 15
+                savings = (other_team - ui_garage)
+                %>
+                <div class="col-lg-4">
+                  <%= text_field_tag 'estimation_templates[dev_cost_other_team]', other_team, :class =>  "form-control", :id => 'dev_cost_other_team', :placeholder => 'Dev Cost', style: 'background-color: lightpink', readonly: true %>
+                </div>
+
+                <div class="col-lg-4">
+                  <%= text_field_tag 'estimation_templates[dev_cost_ui_garage]', ui_garage, :class =>  "form-control", :id => 'dev_cost_ui_garage', :placeholder => 'Dev Cost UI Garage', style: 'background-color: lightgreen', readonly: true %>
+                </div>
+
+                <div class="col-lg-4">
+                  <%= text_field_tag 'estimation_templates[total_savings]', savings, :class =>  "form-control", :id => 'total_savings', :placeholder => 'Savings', style: 'background-color: lightgreen', readonly: true %>
+                </div>
+
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-block" type="button" id="submit_button">Update Estimation</button>
+  <% end %>
+
+<% end %>
+<p class="text-muted text-center" style="margin-bottom: 60px;"></p>
+
+
+
+<script type="text/javascript">
+  $( document ).ready(function() {
+    flag = $('#estimation_templates_offer_flag').val();
+    myFunction(flag);
+  });
+
+  $('#estimation_templates_offer_flag').on('change', function() {
+    flag = this.value;
+    myFunction(flag);
+  });
+
+  function myFunction(flag) {
+    if (flag == 'true'){
+      var offer_sum = 0;
+      $('.sub_category_offer').each(function(){
+        offer_sum += parseInt($(this).val());  // Or this.innerHTML, this.innerText
+      });
+      $('#offer_total').val(offer_sum);
+      calculateTotal();
+      $('#offer_block').show();
+    } else {
+      $('#offer_total').val(0);
+      calculateTotal();
+      $('#offer_block').hide();
+    }
+  }
+</script>
+
+
+<script type="text/javascript">
+    $( document ).ready(function() {
+        $("#submit_button").click(function(){
+          $('form').submit()
+        });
+      calculateTotal();
+    });
+
+
+    $(".depends_on_ui, .one_time_setup, .depends_on_usecase, .depends_on_iteration").change(function(){
+      val = this.value;
+      if(val == 1 || val == '1'){
+        estimated_val = $(this).parent().parent().find(".estimated_total").val();
+        $(this).parent().parent().find(".overridden_total").val(estimated_val);
+        $(this).css('border-color', 'green');
+      } else {
+        $(this).parent().parent().find(".overridden_total").val(0);
+        $(this).css('border-color', 'red');
+      }
+      calculateTotal();
+    });
+
+    $(".iteration_count").keyup(function(){
+      val = this.value;
+      if(val > 0){
+        estimated_val = $(this).parent().parent().find(".estimated_total").val();
+        $(this).parent().parent().find(".overridden_total").val(estimated_val * val);
+        $(this).css('border-color', 'green');
+      } else{
+        $(this).parent().parent().find(".iteration_count").val(1);
+        estimated_val = $(this).parent().parent().find(".estimated_total").val();
+        $(this).parent().parent().find(".overridden_total").val(estimated_val * 1);
+        alert('Number of Iteration should be greater than ZERO')
+      }
+      calculateTotal();
+    }); 
+
+    $("#reuse_factor").keyup(function(){
+      val = this.value;
+      if(val > 0){
+        calculateTotal();
+      } else {
+       $('#reuse_factor').val(0);
+       calculateTotal();
+      }
+    });
+
+    $("#pm_factor").change(function(){
+      val = this.value;
+      if(val > 6){
+        calculateTotal();
+      } else {
+        alert('cannot be less then 7%')
+        $('#pm_factor').val(7);
+        calculateTotal();
+      }
+    });
+
+    $("#mr_factor").change(function(){
+      val = this.value;
+      if(val > 4){
+        calculateTotal();
+      } else {
+        alert('cannot be less then 5%')
+        $('#mr_factor').val(5);
+        calculateTotal();
+      }
+    });
+
+    function calculateTotal() {
+      var sum = 0;
+      $('.overridden_total').each(function(){
+          sum += parseInt($(this).val());  // Or this.innerHTML, this.innerText
+      });
+      $('#overridden_total').val(sum);
+      $('#estimated_total').val(sum);
+      var reuse_factor = $('#reuse_factor').val();
+      var offer_total = $('#offer_total').val();
+      var reuse_total = (reuse_factor * (sum - offer_total)) / 100
+      var final_hours = parseInt(sum - offer_total - reuse_total)
+      // PM & Meeting Reviews Calculation
+      var pm_factor = $('#pm_factor').val();
+      var mr_factor = $('#mr_factor').val();
+      var pm_effort = parseInt((pm_factor * final_hours) / 100)
+      var mr_effort = parseInt((mr_factor * final_hours) / 100)
+      $('#pm_effort').val(pm_effort);
+      $('#mr_effort').val(mr_effort);
+      final_hours = final_hours + pm_effort + mr_effort
+      // END
+      $('#final_hours').val(final_hours);
+      var dev_cost_other_team = (sum * 19)
+      $('#dev_cost_other_team').val('$' + dev_cost_other_team);
+      var dev_cost_ui_garage = (final_hours * 15)
+      $('#dev_cost_ui_garage').val('$' + dev_cost_ui_garage);
+      var total_savings = '$' + (dev_cost_other_team - dev_cost_ui_garage)
+      $('#total_savings').val(total_savings);
+    }
+</script>

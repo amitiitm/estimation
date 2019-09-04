@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     collection do
       get 'estimation_details'
       post 'create_estimation_details'
+      post 'update_estimation_details'
       get 'view_estimation_details'
       get 'functional_scope'
       post 'functional_scope'

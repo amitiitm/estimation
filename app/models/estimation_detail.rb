@@ -71,4 +71,44 @@ class EstimationDetail < ApplicationRecord
 			end
 		end
 	end
+
+	def self.update_details(params)
+		estimation_details = params['estimation_details']
+		estimation_templates = params['estimation_templates']
+		ActiveRecord::Base.transaction do
+			begin
+				estimation_template = EstimationTemplate.find_by(id: estimation_templates[:id], 
+																												 estimation_id: estimation_templates[:estimation_id],
+																												 template_id: estimation_templates[:template_id])
+				estimation_template.update_attributes!(
+																								estimated_total: estimation_templates[:estimated_total],
+																								overridden_total: estimation_templates[:overridden_total],
+																								offer_flag: estimation_templates[:offer_flag],
+																								reuse_factor: estimation_templates[:reuse_factor],
+																								offer_total: estimation_templates[:offer_total],
+																								final_hours: estimation_templates[:final_hours],
+																								pm_factor: estimation_templates[:pm_factor],
+																								pm_effort: estimation_templates[:pm_effort],
+																								mr_factor: estimation_templates[:mr_factor],
+																								mr_effort: estimation_templates[:mr_effort]
+																							)
+
+				estimation_details['id'].each_with_index do |details, index|
+					estimation_detail = EstimationDetail.find_by(id: estimation_details['id'][index], 
+																											 estimation_id: estimation_details['estimation_id'][index],
+																											 estimation_template_id: estimation_details['estimation_template_id'][index])
+					estimation_detail.update_attributes!(
+																	applicable: estimation_details['applicable'][index],
+																	component_high_count: estimation_details['component_high_count'][index],
+																	estimated_total: estimation_details['estimated_total'][index],
+																	overridden_total: estimation_details['overridden_total'][index],
+																	offer_flag: estimation_templates['offer_flag']
+																)
+				end
+				return true
+			rescue ActiveRecord::StatementInvalid
+				return false
+			end
+		end
+	end
 end
