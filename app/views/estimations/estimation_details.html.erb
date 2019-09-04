@@ -208,7 +208,7 @@
     });
 
 
-    $(".depends_on_ui, .one_time_setup, .depends_on_usecase, .depends_on_iteration").change(function(){
+    $(".depends_on_ui, .one_time_setup, .depends_on_usecase, .depends_on_iteration, .depends_on_testcase").change(function(){
       val = this.value;
       if(val == 1 || val == '1'){
         estimated_val = $(this).parent().parent().find(".estimated_total").val();
